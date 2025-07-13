@@ -1,0 +1,18 @@
+extends ../../layouts/layoutDefault.pug
+
+block content
+  h1 Product List
+  table.table.table-striped
+    thead
+      tr
+        th ID
+        th Name
+        th Price
+        th Description
+    tbody
+      each product in products
+        tr
+          td= product._id
+          td= product.title
+          td= product.price
+          td= product.description

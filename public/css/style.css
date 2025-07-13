@@ -1,0 +1,96 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* HEADER */
+header.header {
+  background-color: #f8f9fa;
+  padding: 15px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  width: 50px;
+}
+
+.logo h1 {
+  font-size: 24px;
+  color: #333;
+}
+
+nav.nav ul.menu {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav.nav ul.menu li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+nav.nav ul.menu li a:hover {
+  color: #007bff;
+}
+
+/* AUTH BUTTON */
+.auth .btn {
+  padding: 6px 12px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.auth .btn:hover {
+  background-color: #0056b3;
+}
+
+/* FOOTER */
+footer {
+  background-color: #f1f1f1;
+  padding: 15px 0;
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+}
+
+footer p {
+  margin: 0;
+}
+.table-striped {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-striped tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.table-striped th,
+.table-striped td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+}
+
+.table-striped th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
