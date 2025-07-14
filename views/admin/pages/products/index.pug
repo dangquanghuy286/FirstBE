@@ -2,36 +2,48 @@ extends ../../layouts/default.pug
 
 block content
   h1= title
-  if products.length > 0
-    table.table.table-striped
-      thead
-        tr
-          th #
-          th Name
-          th Price
-          th Description
-          th Image
-          th Actions
-          th Status
-      tbody
-        each product, index in products
-          tr
-            td= index + 1
-            td= product.title
-            td= product.price
-            td= product.description
-            td
-              img(src=product.thumbnail, alt=product.title, style="width: 100px; height: auto;")
-            td
-              button(class="btn btn-warning btn-sm") Edit
-              button(class="btn btn-danger btn-sm") Delete
-            td 
-                if product.status === 'active'
-                    span(class="badge bg-success") Active
-                else if product.status === 'inactive'
-                    span(class="badge bg-secondary") Inactive
-                else
-                    span(class="badge bg-danger") Unknown Status
 
+  .card.mb-3 
+    .card-header Bộ lọc sản phẩm
+    .card-body
+      each item in filterStatus
+        button(
+          class=`btn btn-outline-success me-2 ${item.class}`,
+          button-status=item.status
+        ) #{item.name}
+
+  if products.length > 0
+    .card
+      .card-header Danh sách sản phẩm
+      .card-body
+        table.table.table-striped
+          thead
+            tr
+              th #
+              th Name
+              th Price
+              th Description
+              th Image
+              th Actions
+              th Status
+          tbody
+            each product, index in products
+              tr
+                td= index + 1
+                td= product.title
+                td= product.price
+                td= product.description
+                td
+                  img(src=product.thumbnail, alt=product.title, style="width: 100px; height: auto;")
+                td
+                  button(class="btn btn-warning btn-sm me-1") Edit
+                  button(class="btn btn-danger btn-sm") Delete
+                td
+                  if product.status === 'active'
+                    span(class="badge bg-success") Active
+                  else if product.status === 'inactive'
+                    span(class="badge bg-secondary") Inactive
+                  else
+                    span(class="badge bg-danger") Unknown Status
   else
     p No products available.
