@@ -2,7 +2,7 @@ const express = require("express");
 require("dotenv").config();
 const db = require("./config/database");
 
-// Sửa đường dẫn import này
+const systemconfig = require("./config/system");
 const routeAdmin = require("./routes/admin/index.route");
 const route = require("./routes/client/index.route");
 
@@ -10,6 +10,9 @@ db.connect();
 
 const app = express();
 const port = process.env.PORT;
+
+//App local variables
+app.locals.prefixAdmin = systemconfig.prefixAdmin;
 
 app.set("views", "./views");
 app.set("view engine", "pug");
