@@ -1,37 +1,23 @@
 const Product = require("../../models/product.model");
-
+const filterStatusHelper = require("../../helpers/filterStatus");
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
-  const filterStatus = [
-    {
-      name: "Tất cả",
-      status: "",
-      class: "",
-    },
-    {
-      name: "Hoạt động",
-      status: "active",
-      class: "",
-    },
-    {
-      name: "Không hoạt động",
-      status: "inactive",
-      class: "",
-    },
-  ];
+  const filterStatus = filterStatusHelper(req.query);
+
+  let keyword = "";
 
   let find = {
     deleted: false,
   };
 
   if (req.query.status) {
-    const index = filterStatus.findIndex(
-      (item) => item.status == req.query.status
-    );
-    filterStatus[index].class = "active";
-  } else {
-    const index = filterStatus.findIndex((item) => item.status == "");
-    filterStatus[index].class = "active";
+    find.status = req.query.status;
+  }
+
+  if (req.query.keyword) {
+    keyword = req.query.keyword.trim(); //trim() la ham loai bo khoang trang
+    const regex = new RegExp(keyword, "i"); //i là để không phân biệt chữ hoa chữ thường
+    find.title = regex;
   }
 
   const products = await Product.find(find);
@@ -40,5 +26,6 @@ module.exports.index = async (req, res) => {
     title: "Product Management",
     products: products,
     filterStatus: filterStatus,
+    keyword: keyword,
   });
 };
