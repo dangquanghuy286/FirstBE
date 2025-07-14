@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/filterStatus.pug
+include ../../mixins/search.pug
 block content
   h1= title
 
@@ -11,10 +12,8 @@ block content
         .col-6
           +filter-status(filterStatus)
         .col-6
-          form(id="formSearch")
-            .input-group
-              input.form-control(type="text", name="keyword", placeholder="Tìm kiếm sản phẩm")
-              button.btn.btn-primary(type="submit") Tìm kiếm
+          +search(keyword)
+          
 
 
   if products.length > 0
