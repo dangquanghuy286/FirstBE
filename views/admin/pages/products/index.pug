@@ -1,28 +1,37 @@
 extends ../../layouts/default.pug
 
 block content
-  h1 Danh sách sản phẩm
+  h1= title
+  if products.length > 0
+    table.table.table-striped
+      thead
+        tr
+          th #
+          th Name
+          th Price
+          th Description
+          th Image
+          th Actions
+          th Status
+      tbody
+        each product, index in products
+          tr
+            td= index + 1
+            td= product.title
+            td= product.price
+            td= product.description
+            td
+              img(src=product.thumbnail, alt=product.title, style="width: 100px; height: auto;")
+            td
+              button(class="btn btn-warning btn-sm") Edit
+              button(class="btn btn-danger btn-sm") Delete
+            td 
+                if product.status === 'active'
+                    span(class="badge bg-success") Active
+                else if product.status === 'inactive'
+                    span(class="badge bg-secondary") Inactive
+                else
+                    span(class="badge bg-danger") Unknown Status
 
-  table.table.table-striped
-    thead
-      tr
-        th ID
-        th Name
-        th Price
-        th Description
-    tbody
-      tr
-        td 1
-        td Sản phẩm A
-        td 100.000đ
-        td Mô tả sản phẩm A
-      tr
-        td 2
-        td Sản phẩm B
-        td 200.000đ
-        td Mô tả sản phẩm B
-      tr
-        td 3
-        td Sản phẩm C
-        td 300.000đ
-        td Mô tả sản phẩm C
+  else
+    p No products available.
