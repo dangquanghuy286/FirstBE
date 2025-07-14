@@ -3,14 +3,22 @@ extends ../../layouts/default.pug
 block content
   h1= title
 
+  
   .card.mb-3 
     .card-header Bộ lọc sản phẩm
     .card-body
-      each item in filterStatus
-        button(
-          class=`btn btn-outline-success me-2 ${item.class}`,
-          button-status=item.status
-        ) #{item.name}
+      .row 
+        .col-6
+          each item in filterStatus
+            button(
+              class=`btn btn-outline-success me-2 ${item.class}`,
+              button-status=item.status) #{item.name}
+        .col-6
+          form(id="formSearch")
+            .input-group
+              input.form-control(type="text", name="keyword", placeholder="Tìm kiếm sản phẩm")
+              button.btn.btn-primary(type="submit") Tìm kiếm
+
 
   if products.length > 0
     .card
