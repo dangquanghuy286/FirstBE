@@ -6,14 +6,14 @@ const db = require("./config/database");
 const systemconfig = require("./config/system");
 const routeAdmin = require("./routes/admin/index.route");
 const route = require("./routes/client/index.route");
-
+const bodyParser = require("body-parser");
 db.connect();
 
 const app = express();
 app.use(methodOverride("_method"));
 const port = process.env.PORT;
 
-// override with POST having ?_method=DELETE
+app.use(bodyParser.urlencoded());
 
 //App local variables
 app.locals.prefixAdmin = systemconfig.prefixAdmin;
