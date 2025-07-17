@@ -1,4 +1,5 @@
 const express = require("express");
+var methodOverride = require("method-override");
 require("dotenv").config();
 const db = require("./config/database");
 
@@ -9,7 +10,10 @@ const route = require("./routes/client/index.route");
 db.connect();
 
 const app = express();
+app.use(methodOverride("_method"));
 const port = process.env.PORT;
+
+// override with POST having ?_method=DELETE
 
 //App local variables
 app.locals.prefixAdmin = systemconfig.prefixAdmin;

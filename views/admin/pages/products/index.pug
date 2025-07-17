@@ -40,9 +40,20 @@ block content
                   button(class="btn btn-danger btn-sm") Delete
                 td
                   if product.status === 'active'
-                    span(class="badge bg-success") Active
+                    a(
+                    href="javascript:;" 
+                    class="badge bg-success"
+                    button-change-status
+                    data-status =product.status
+                    data-id=product.id
+                    )  Active
                   else if product.status === 'inactive'
-                    span(class="badge bg-secondary") Inactive
+                    a(class="badge bg-secondary"
+                     href="javascript:;" 
+                     button-change-status
+                     data-status =product.status
+                     data-id=product.id
+                    ) Inactive
                   else
                     span(class="badge bg-danger") Unknown Status
     
@@ -50,3 +61,12 @@ block content
   else
     p No products available.
   +pagination(pagination)
+
+  form(
+  action="" 
+  method="POST"
+  id="form-change-status"
+  data-path=`${prefixAdmin}/products/change-status`
+  ) 
+
+  script(src="/admin/js/product.js")
