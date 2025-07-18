@@ -101,7 +101,13 @@ if (formChangeMulti) {
     const inputChecked = checkboxMulti.querySelectorAll(
       "input[name='id']:checked"
     );
-
+    const typeChange = e.target.elements.type.value;
+    if (typeChange === "delete-all") {
+      const isConfirm = confirm("Ban co muon xoa khong");
+      if (!isConfirm) {
+        return;
+      }
+    }
     if (inputChecked.length > 0) {
       let ids = [];
       const inputIds = formChangeMulti.querySelector("input[name='ids']");

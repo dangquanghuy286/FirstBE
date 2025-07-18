@@ -73,6 +73,15 @@ module.exports.changeMulti = async (req, res) => {
         }
       );
       break;
+    case "deleteAll":
+      await Product.updateMany(
+        { _id: { $in: ids } },
+        {
+          deleted: true,
+          deleteDate: new Date(),
+        }
+      );
+      break;
 
     default:
       break;
@@ -88,7 +97,7 @@ module.exports.changeMulti = async (req, res) => {
 // };
 
 //Xóa mềm(có thể khôi phục)
-//
+//[DELETE] /admin/product/delete/:id
 module.exports.deleteItem = async (req, res) => {
   const id = req.params.id;
   await Product.updateOne(
