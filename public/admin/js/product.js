@@ -30,10 +30,22 @@ if (buttonDelete.length > 0) {
       if (isConfirm) {
         const id = button.getAttribute("data-id");
         const action = `${path}/${id}?_method=DELETE`;
-        console.log(action);
         formDeleteItem.action = action;
         formDeleteItem.submit();
       }
     });
+  });
+}
+
+//Show Alert
+const showAlert = document.querySelector("[showAlert]");
+if (showAlert) {
+  const time = parseInt(showAlert.getAttribute("data-time"));
+  const closeAlert = showAlert.querySelector("[close-alert]");
+  setTimeout(() => {
+    showAlert.classList.add("alert-hidden");
+  }, time);
+  closeAlert.addEventListener("click", () => {
+    showAlert.classList.add("alert-hidden");
   });
 }
