@@ -32,6 +32,7 @@ block content
               th Price
               th Description
               th Image
+              th Position
               th Actions
               th Status
           tbody
@@ -47,6 +48,14 @@ block content
                 td= product.description
                 td
                   img(src=product.thumbnail, alt=product.title, style="width: 100px; height: auto;")
+                td 
+                  input(
+                    type="number"
+                    value=product.position
+                    style="width:60px"
+                    min="1"
+                    name="position")
+                    
                 td
                   button(class="btn btn-warning btn-sm me-1") Edit
                   button(
