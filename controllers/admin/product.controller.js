@@ -80,9 +80,20 @@ module.exports.changeMulti = async (req, res) => {
   res.redirect(req.get("referer") || "/admin/products");
 };
 
-//[DELETE] /admin/product/delete/:id
+// //[DELETE] /admin/product/delete/:id
+// module.exports.deleteItem = async (req, res) => {
+//   const id = req.params.id;
+//   await Product.deleteOne({ _id: id });
+//   res.redirect(req.get("referer") || "/admin/products");
+// };
+
+//Xóa mềm(có thể khôi phục)
+//
 module.exports.deleteItem = async (req, res) => {
   const id = req.params.id;
-  await Product.deleteOne({ _id: id });
+  await Product.updateOne(
+    { _id: id },
+    { deleted: true, deleteDate: new Date() }
+  );
   res.redirect(req.get("referer") || "/admin/products");
 };
