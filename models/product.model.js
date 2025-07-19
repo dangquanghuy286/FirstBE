@@ -30,7 +30,7 @@ const productSchema = new mongoose.Schema(
 productSchema.pre("save", async function (next) {
   // Chỉ xử lý khi title bị thay đổi hoặc khi slug chưa có
   if (!this.isModified("title")) return next();
-
+  // Chuyen Title thanh slug
   const baseSlug = slugify(this.title, {
     lower: true,
     strict: true,
