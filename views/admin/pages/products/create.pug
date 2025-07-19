@@ -1,0 +1,46 @@
+extends ../../layouts/default.pug
+
+block content
+  h1.mb-4 Thêm mới sản phẩm
+  form(action=`${prefixAdmin}/products/create` method="POST"  id="form-create-product")
+    div.form-group
+      label(for="title") Tiêu đề
+      input#title.form-control(type="text" name="title" required)
+
+    div.form-group
+      label(for="description") Mô tả
+      textarea#description.form-control(name="description" rows="4")
+    div.form-group
+      label(for="discountPercentage") Giảm giá (%)
+      input#discountPercentage.form-control(type="number" name="discountPercentage" min="0" max="100")
+    div.form-group
+      label(for="price") Giá (%)
+      input#price.form-control(type="number" name="price" min="0" value="0")
+
+    div.form-group
+      label(for="stock") Số lượng
+      input#stock.form-control(type="number" name="stock" min="0")
+
+    div.form-group
+      label(for="thumbnail") Ảnh
+      input#thumbnail.form-control(type="text" name="thumbnail")
+
+    div.form-group
+      label Trạng thái
+      div
+        label.mr-3
+          input#statusActive.form-check-input(type="radio" name="status" value="active" checked)
+          |  Hoạt động
+        label
+          input#statusInActive.form-check-input(type="radio" name="status" value="inactive")
+          |  Dừng hoạt động
+    
+      
+
+    div.form-group
+      label(for="position") Vị trí
+      input#position.form-control(type="number" name="position" min="0")
+
+    button.btn.btn-primary(type="submit") Tạo mới
+
+  script(src="/admin/js/product.js")

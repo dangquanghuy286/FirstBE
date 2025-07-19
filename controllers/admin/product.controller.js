@@ -85,6 +85,7 @@ module.exports.changeMulti = async (req, res) => {
           deleteDate: new Date(),
         }
       );
+      req.flash("success", `Xóa thành công ${ids.length} sản phẩm!`);
 
       break;
     case "changePosition":
@@ -92,6 +93,10 @@ module.exports.changeMulti = async (req, res) => {
         let [id, position] = item.split("-");
         position = parseInt(position);
         await Product.updateOne({ _id: id }, { position: position });
+        req.flash(
+          "success",
+          `Thay đổi vị trí thành công ${ids.length} sản phẩm!`
+        );
       }
 
       break;
@@ -117,5 +122,27 @@ module.exports.deleteItem = async (req, res) => {
     { _id: id },
     { deleted: true, deleteDate: new Date() }
   );
+  req.flash("success", `Xóa thành công sản phẩm với id ${_id}!`);
   res.redirect(req.get("referer") || "/admin/products");
+};
+//[GET] /admin/create
+module.exports.create = async (req, res) => {
+  res.render("admin/pages/products/create"), {};
+};
+//[POST] /admin/create
+module.exports.createItem = async (req, res) => {
+  req.body.price = parseInt(req.body.price);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.stock = parseInt(req.body.stock);
+
+  if (req.body.position == "") {
+    const countProducts = await Product.countDocuments();
+    req.body.position = countProducts + 1;
+  } else {
+    req.body.position = parseInt(req.body.position);
+  }
+  const product = new Product(req.body);
+  await product.save();
+  req.flash("success", `Thêm sản phẩm thành công !`);
+  res.redirect("/admin/products");
 };
