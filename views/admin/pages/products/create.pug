@@ -21,9 +21,10 @@ block content
       label(for="stock") Số lượng
       input#stock.form-control(type="number" name="stock" min="0" value="0")
 
-    div.form-group
+    div.form-group(upload-image)
       label(for="thumbnail") Ảnh
-      input#thumbnail.form-control-file(type="file" name="thumbnail"  accept="image/*")
+      input#thumbnail.form-control-file(type="file" name="thumbnail"  accept="image/*" upload-image-input)
+      img(src="", alt="" upload-image-preview class="image-preview")
 
     div.form-group
       label Trạng thái
