@@ -9,6 +9,7 @@ const upload = multer({
   },
 });
 const dashboardController = require("../../controllers/admin/product.controller");
+const validateController = require("../../validates/admin/productValidate");
 
 router.get("/", dashboardController.index);
 
@@ -19,6 +20,14 @@ router.get("/create", dashboardController.create);
 router.post(
   "/create",
   upload.single("thumbnail"),
+  validateController.createPost,
   dashboardController.createItem
+);
+router.get("/edit/:id", dashboardController.viewEdit);
+router.patch(
+  "/edit/:id",
+  upload.single("thumbnail"),
+  validateController.createPost,
+  dashboardController.editPatch
 );
 module.exports = router;

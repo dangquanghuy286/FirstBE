@@ -1,0 +1,46 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block content
+  +alert-error(5000)
+  +alert-success(5000)
+  h1.mb-4 Sửa sản phẩm
+  form(action=`${prefixAdmin}/products/edit/${product._id}?_method=PATCH` method="POST" id="form-edit-product" enctype="multipart/form-data")
+    div.form-group
+      label(for="title") Tiêu đề
+      input#title.form-control(type="text" name="title" value=product.title)
+    div.form-group
+      label(for="description") Mô tả
+      textarea#description.form-control(name="description" rows="4") #{product.description}
+    div.form-group
+      label(for="discountPercentage") Giảm giá (%)
+      input#discountPercentage.form-control(type="number" name="discountPercentage" min="0" max="100" value=product.discountPercentage)
+    div.form-group
+      label(for="price") Giá 
+      input#price.form-control(type="number" name="price" min="0" value=product.price)
+    div.form-group
+      label(for="stock") Số lượng
+      input#stock.form-control(type="number" name="stock" min="0" value=product.stock)
+    div.form-group(upload-image)
+      label(for="thumbnail") Ảnh
+      input#thumbnail.form-control-file(type="file" name="thumbnail" accept="image/*" upload-image-input)
+      
+      div.image-preview-wrapper(class=product.thumbnail ? '' : 'hidden')
+        img.image-preview(upload-image-preview src=product.thumbnail || '' alt="Ảnh xem trước")
+        button.remove-image(type="button" remove-image) ×
+    
+    div.form-group
+      label Trạng thái
+      div
+        label.mr-3
+          input#statusActive.form-check-input(type="radio" name="status" value="active" checked=(product.status === 'active'))
+          |  Hoạt động
+        label
+          input#statusInActive.form-check-input(type="radio" name="status" value="inactive" checked=(product.status === 'inactive'))
+          |  Dừng hoạt động
+      
+    div.form-group
+      label(for="position") Vị trí
+      input#position.form-control(type="number" name="position" min="0" value=product.position)
+    button.btn.btn-primary(type="submit") Cập nhật
+  
+  script(src="/admin/js/product.js")

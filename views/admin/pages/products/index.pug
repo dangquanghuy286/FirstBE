@@ -64,7 +64,8 @@ block content
                     name="position")
                     
                 td
-                  button(class="btn btn-warning btn-sm me-1") Edit
+                  a(href=`${prefixAdmin}/products/edit/${product.id}`
+                    class="btn btn-warning btn-sm me-1") Edit
                   button(
                     class="btn btn-danger btn-sm"
                     button-Delete

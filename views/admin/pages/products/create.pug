@@ -1,11 +1,12 @@
 extends ../../layouts/default.pug
-
+include ../../mixins/alert.pug
 block content
+  +alert-error(5000)
   h1.mb-4 Thêm mới sản phẩm
   form(action=`${prefixAdmin}/products/create` method="POST"  id="form-create-product" enctype="multipart/form-data")
     div.form-group
       label(for="title") Tiêu đề
-      input#title.form-control(type="text" name="title" required)
+      input#title.form-control(type="text" name="title" )
 
     div.form-group
       label(for="description") Mô tả
@@ -23,8 +24,13 @@ block content
 
     div.form-group(upload-image)
       label(for="thumbnail") Ảnh
-      input#thumbnail.form-control-file(type="file" name="thumbnail"  accept="image/*" upload-image-input)
-      img(src="", alt="" upload-image-preview class="image-preview")
+      input#thumbnail.form-control-file(type="file" name="thumbnail" accept="image/*" upload-image-input)
+  
+  
+    div.image-preview-wrapper
+      img.image-preview(upload-image-preview src="" alt="Ảnh xem trước")
+      button.remove-image(type="button" remove-image) ×
+
 
     div.form-group
       label Trạng thái
