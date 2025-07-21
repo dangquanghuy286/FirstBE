@@ -1,0 +1,45 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block content
+  +alert-error(5000)
+
+  h1.mb-4 Chi tiết sản phẩm
+
+  dl
+    dt Tiêu đề:
+    dd #{product.title}
+
+    dt Mô tả:
+    dd #{product.description}
+
+    dt Giảm giá (%):
+    dd #{product.discountPercentage}%
+
+    dt Giá:
+    dd #{product.price} VNĐ
+
+    dt Số lượng trong kho:
+    dd #{product.stock}
+
+    dt Ảnh:
+    dd
+      if product.thumbnail
+        img(src=product.thumbnail alt="Ảnh sản phẩm" width="200")
+      else
+        span Không có ảnh
+
+    dt Trạng thái:
+    dd 
+      if product.status === 'active'
+        span.text-success Hoạt động
+      else
+        span.text-danger Dừng hoạt động
+
+    dt Vị trí:
+    dd #{product.position}
+    a.btn.btn-warning(href=`${prefixAdmin}/products/edit/${product.id}`) Chỉnh sửa
+   
+
+    a.btn.btn-secondary(href=`${prefixAdmin}/products`) Quay lại danh sách
+    script(src="/admin/js/product.js")

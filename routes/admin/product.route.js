@@ -30,4 +30,6 @@ router.patch(
   validateController.createPost,
   dashboardController.editPatch
 );
+
+router.get("/detail/:id", dashboardController.detail);
 module.exports = router;
