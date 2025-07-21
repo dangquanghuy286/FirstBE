@@ -2,17 +2,25 @@ extends ../../layouts/layoutDefault.pug
 
 block content
   h1 Product List
-  table.table.table-striped
-    thead
-      tr
-        th ID
-        th Name
-        th Price
-        th Description
-    tbody
-      each product in products
-        tr
-          td= product._id
-          td= product.title
-          td= product.price
-          td= product.description
+  .product-grid
+    each product in products
+      .product-item
+        .card.h-100.product-card
+          if product.thumbnail
+            img.card-img-top(src=product.thumbnail alt=product.title style="height: 200px; object-fit: cover;")
+          else
+            .card-img-top.bg-light.d-flex.align-items-center.justify-content-center(style="height: 200px;")
+              i.fas.fa-image.text-muted.fa-3x
+          .card-body
+            h5.card-title 
+              a(href=`/product/${product.slug}` )= product.title
+            .card-text
+              p.mb-2
+                strong ID: 
+                span.product-id= product._id
+              p.mb-2
+                strong Price: 
+                span.price-tag $#{product.price}
+              p.mb-0
+                strong Description: 
+                span.description-text= product.description

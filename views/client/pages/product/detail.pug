@@ -1,0 +1,23 @@
+extends ../../layouts/layoutDefault.pug
+
+block content
+  .container.mt-5
+    .row
+      .col-md-6
+        if product.thumbnail
+          img.img-fluid.rounded.shadow(src=product.thumbnail alt=product.title style="max-height: 400px; object-fit: cover;")
+        else
+          .d-flex.align-items-center.justify-content-center.bg-light.rounded.shadow(style="height: 400px;")
+            i.fas.fa-image.text-muted.fa-5x
+
+      .col-md-6
+        h2.mb-3= product.title
+        p.text-muted.mb-2
+          strong ID: 
+          | #{product._id}
+        h4.text-danger.mb-3 $#{product.price}
+        p
+          strong Description:
+        p.lead= product.description
+
+        a.btn.btn-primary.mt-3(href="/product") ← Back to Products
