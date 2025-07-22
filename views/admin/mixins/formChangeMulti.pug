@@ -1,22 +1,21 @@
 mixin form-change-multi(action)
-    form(
-          action=action
-          method="POST"
-          form-change-multi
-        ) 
-          .d-flex.align-items-start 
-            .form-group 
-              select(name="type" class="form-control")
-                option(selected disabled) --Chọn-- 
-                option(value="active") Hoạt Động 
-                option(value="inactive") Dừng Hoạt Động
-                option(value="changePosition") Sắp xếp lại vị trí
-                option(value="deleteAll") Xóa tất cả
-            .form-group 
-              input(
-                type="text"
-                name="ids"
-                value=""
-                class="form-control d-none"
-              )
-            button(type="submit" class="btn btn-primary") Áp dụng 
+  form(
+    action=action
+    method="POST"
+    form-change-multi
+  )
+    .d-flex.align-items-start.gap-2
+      .form-group.me-2
+        select.form-control(name="type")
+          option(selected disabled) -- Chọn --
+          option(value="active") Hoạt Động
+          option(value="inactive") Dừng Hoạt Động
+          option(value="changePosition") Sắp xếp lại vị trí
+          option(value="deleteAll") Xóa tất cả
+      .form-group.me-2
+        input.form-control.d-none(
+          type="text"
+          name="ids"
+          value=""
+        )
+      button.btn.btn-primary(type="submit") Áp dụng

@@ -32,8 +32,20 @@ module.exports.index = async (req, res) => {
   );
   //End Pagination
 
+  //SOFT
+  let sort = {};
+  // Kiểm tra nếu người dùng truyền cả sortKey và sortValue qua query string
+  if (req.query.sortKey && req.query.sortValue) {
+    // Gán key và value vào object sort (ví dụ: { price: "asc" } hoặc { name: "desc" })
+    sort[req.query.sortKey] = req.query.sortValue;
+  } else {
+    // Nếu không có thông tin sắp xếp, mặc định sắp xếp theo 'position' giảm dần (desc)
+    sort.position = "desc";
+  }
+  // End Sort
+
   const products = await Product.find(find)
-    .sort({ position: "desc" })
+    .sort(sort)
     .limit(objectPagination.limit)
     .skip(objectPagination.skip);
 
@@ -122,7 +134,7 @@ module.exports.deleteItem = async (req, res) => {
     { _id: id },
     { deleted: true, deleteDate: new Date() }
   );
-  req.flash("success", `Xóa thành công sản phẩm với id ${_id}!`);
+  req.flash("success", `Xóa thành công sản phẩm với id ${id}!`);
   res.redirect(req.get("referer") || "/admin/products");
 };
 //[GET] /admin/create
