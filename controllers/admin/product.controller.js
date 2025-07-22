@@ -141,12 +141,13 @@ module.exports.createItem = async (req, res) => {
   } else {
     req.body.position = parseInt(req.body.position);
   }
-  req.body.thumbnail = `/uploads/${req.file.filename}`;
+  // req.body.thumbnail = `/uploads/${req.file.filename}`;
   const product = new Product(req.body);
   await product.save();
   req.flash("success", `Thêm sản phẩm thành công !`);
   res.redirect("/admin/products");
 };
+
 //[GET]/admin/products/edit/:id
 module.exports.viewEdit = async (req, res) => {
   const find = {
@@ -164,10 +165,6 @@ module.exports.editPatch = async (req, res) => {
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
   req.body.position = parseInt(req.body.position);
-
-  if (req.file) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`;
-  }
   try {
     await Product.updateOne(
       {
