@@ -2,6 +2,8 @@ const Product = require("../../models/product.model");
 const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const pagination = require("../../helpers/pagination");
+// Load biến môi trường từ file .env
+require("dotenv").config();
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
   let find = {
@@ -139,7 +141,9 @@ module.exports.deleteItem = async (req, res) => {
 };
 //[GET] /admin/create
 module.exports.create = async (req, res) => {
-  res.render("admin/pages/products/create"), {};
+  res.render("admin/pages/products/create", {
+    tinymceApiKey: process.env.TINYMCE_API_KEY,
+  });
 };
 //[POST] /admin/create
 module.exports.createItem = async (req, res) => {
@@ -169,6 +173,7 @@ module.exports.viewEdit = async (req, res) => {
   const product = await Product.findOne(find);
   res.render("admin/pages/products/edit", {
     product: product,
+    tinymceApiKey: process.env.TINYMCE_API_KEY,
   });
 };
 //[PATCH]/admin/products/edit/:id
