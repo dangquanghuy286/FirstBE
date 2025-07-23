@@ -1,0 +1,43 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block content
+  +alert-error(5000)
+  h1.mb-4 Tạo danh mục sản phẩm
+  form(action=`${prefixAdmin}/categories-product/create` method="POST" id="form-create-category" enctype="multipart/form-data")
+    div.form-group
+      label(for="title") Tên danh mục
+      input#title.form-control(type="text" name="title")
+    div.form-group
+      label(for="parent_id") Doanh mục trang
+      input#parent_id.form-control(type="text" name="parent_id")
+
+    div.form-group
+      label(for="description") Mô tả
+      textarea#description.form-control(name="description" rows="4")
+
+    div.form-group
+      label(for="position") Vị trí
+      input#position.form-control(type="number" name="position" min="0")
+
+    div.form-group(upload-image)
+      label(for="thumbnail") Ảnh đại diện
+      input#thumbnail.form-control-file(type="file" name="thumbnail" accept="image/*" upload-image-input)
+
+    div.image-preview-wrapper
+      img.image-preview(upload-image-preview src="" alt="Ảnh xem trước")
+      button.remove-image(type="button" remove-image) ×
+
+    div.form-group
+      label Trạng thái
+      div
+        label.mr-3
+          input#statusActive.form-check-input(type="radio" name="status" value="active" checked)
+          |  Hoạt động
+        label
+          input#statusInActive.form-check-input(type="radio" name="status" value="inactive")
+          |  Dừng hoạt động
+
+    button.btn.btn-primary(type="submit") Tạo danh mục
+
+  script(src="/admin/js/productCategory.js")

@@ -1,0 +1,25 @@
+const express = require("express");
+const multer = require("multer");
+const router = express.Router();
+
+const upload = multer({
+  // storage: storageMulter(),
+  // limits: {
+  //   fileSize: 5 * 1024 * 1024,
+  // },
+});
+
+const dashboardController = require("../../controllers/admin/productCategory.controller");
+const uploadCloud = require("../../middlewares/admin/uploadClound.middleware");
+const validateController = require("../../validates/admin/productCategoryValidate");
+router.get("/", dashboardController.index);
+router.get("/create", dashboardController.create);
+router.post(
+  "/create",
+  upload.single("thumbnail"),
+  uploadCloud.uploadCloud,
+  validateController.createPost,
+  dashboardController.createItem
+);
+
+module.exports = router;
