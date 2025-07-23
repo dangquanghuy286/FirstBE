@@ -4,6 +4,9 @@ const express = require("express");
 // Thư viện hỗ trợ gửi request với method khác như PUT, DELETE thông qua form (HTML chỉ hỗ trợ GET và POST)
 var methodOverride = require("method-override");
 
+//Thư viện hỗ trợ TinyMCE
+var path = require("path");
+
 // Load biến môi trường từ file .env
 require("dotenv").config();
 
@@ -57,6 +60,12 @@ app.set("view engine", "pug");
 app.use(cookieParser("keyboard cat")); // Chuỗi bí mật dùng để mã hóa cookie
 app.use(session({ cookie: { maxAge: 60000 } })); // Thiết lập session có thời hạn 60s
 app.use(flash()); // Kích hoạt flash message
+
+// Cấu hình TinyMce
+app.use(
+  "/tinymce",
+  express.static(path.join(__dirname, "node_modules", "tinymce"))
+);
 
 // Cấu hình thư mục chứa các file tĩnh như ảnh, CSS, JS
 app.use(express.static(`${__dirname}/public`));
