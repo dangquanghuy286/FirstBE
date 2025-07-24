@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/selectTree.pug
 
 block content
   +alert-error(5000)
@@ -10,7 +11,10 @@ block content
       input#title.form-control(type="text" name="title")
     div.form-group
       label(for="parent_id") Doanh mục trang
-      input#parent_id.form-control(type="text" name="parent_id")
+      select#parent_id.form-control(name="parent_id") 
+        option(value="") --Chọn doanh mục cha--
+        if(records)
+          +renderOptions(records)
 
     div.form-group
       label(for="description") Mô tả

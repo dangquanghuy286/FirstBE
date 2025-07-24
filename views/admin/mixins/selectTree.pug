@@ -1,0 +1,12 @@
+//- // Mixin đệ quy để render các thẻ <option> từ dữ liệu cây danh mục
+mixin renderOptions(items, level = 0)
+    each item in items
+        //- // Tạo chuỗi prefix gồm '-- ' lặp lại tùy theo cấp độ (dùng để thụt lề)
+        - const prefix = Array(level + 1).join('>')
+        
+        //- // Hiển thị một <option> với giá trị là item.id và nội dung có tiền tố  theo cấp độ
+        option(value=item.id) #{prefix}#{item.title}
+        
+        //- // Nếu item có children, tiếp tục đệ quy để hiển thị các danh mục con
+        if item.children && item.children.length > 0
+            +renderOptions(item.children, level + 1)
