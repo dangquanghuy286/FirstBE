@@ -1,7 +1,7 @@
 mixin sortBox
-  .row.align-items-end
-    .col-6
-      div(sort)
+  div(sort)
+    .row.align-items-end
+      .col-8
         select.form-control(name="sort" sort-select)
           option(value="" selected disabled) -- Chọn cách sắp xếp --
           option(value="position-desc") Vị trí giảm dần
@@ -10,4 +10,5 @@ mixin sortBox
           option(value="price-asc") Giá tăng dần
           option(value="title-asc") Tiêu đề A - Z
           option(value="title-desc") Tiêu đề Z - A
-        button(class="btn btn-danger mt-2" sort-clear) Clear
+      .col-4
+        button(class="btn btn-danger" sort-clear) Clear
