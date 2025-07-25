@@ -1,8 +1,9 @@
 extends ../../layouts/default.pug
-
+include ../../mixins/alert.pug
 block content
   h1.mb-4 Permission Group
-
+  +alert-success("5000")
+  +alert-error("5000")
   .card.mb-3 
     .card-header Danh sách 
     .card-body 

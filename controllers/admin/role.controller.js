@@ -23,3 +23,40 @@ module.exports.createRole = async (req, res) => {
 
   res.redirect(req.get("referer") || "/admin/roles");
 };
+// [GET] /admin/roles/edit:id
+module.exports.edit = async (req, res) => {
+  try {
+    const id = req.params.id;
+    let find = {
+      _id: id,
+      deleted: false,
+    };
+
+    const data = await Role.findOne(find);
+    res.render("admin/pages/role/edit", {
+      title: "Edit Role",
+      data: data,
+    });
+  } catch (error) {
+    res.redirect(req.get("referer") || "/admin/roles");
+  }
+};
+// [PATCH] /admin/roles/edit:id
+module.exports.editRole = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    await Role.updateOne(
+      {
+        _id: id,
+      },
+      req.body
+    );
+    req.flash("success", "Cập nhật nhóm quyền thành công!");
+    res.redirect("/admin/roles");
+  } catch (error) {
+    console.error("Error updating category:", error);
+    req.flash("error", "Cập nhật nhóm quyền thất bại!");
+    res.redirect(`/admin/roles`);
+  }
+};

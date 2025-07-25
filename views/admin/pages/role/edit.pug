@@ -1,0 +1,28 @@
+extends ../../layouts/default.pug
+block content
+  h1.mb-4 Chỉnh sửa nhóm quyền
+
+  form(action=`${prefixAdmin}/roles/edit/${data.id}?_method=PATCH`, method="POST")
+    //- Nhập tiêu đề
+    .form-group
+      label(for="title") Tiêu đề
+      input#title.form-control(
+        type="text",
+        name="title",
+        value=data.title,
+        required
+      )
+
+    //- Nhập mô tả
+    .form-group
+      label(for="desc") Mô tả
+      input#desc.form-control(
+        type="text",
+        name="description"
+        value=data.description,
+      )
+
+    //- Nút tạo mới
+    .form-group
+      button.btn.btn-primary(type="submit") Cập nhật
+      
