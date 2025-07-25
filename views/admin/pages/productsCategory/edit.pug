@@ -1,0 +1,89 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+include ../../mixins/selectTree.pug
+
+block content
+  +alert-error(5000)
+  
+  h1.mb-4 Chỉnh sửa danh mục sản phẩm
+  
+  if product
+    form(
+      action=`${prefixAdmin}/categories-product/edit/${product._id}?_method=PATCH`
+      method="POST"
+      id="form-edit-product"
+      enctype="multipart/form-data"
+    )
+      input(
+        type="hidden"
+        name="_id"
+        value=product._id
+      )
+      
+      .form-group
+        label(for="title") Tên danh mục
+        input#title.form-control(
+          type="text"
+          name="title"
+          value=product.title
+        )
+      
+      .form-group
+        label(for="parent_id") Danh mục cha
+        select#parent_id.form-control(name="parent_id")
+          option(value="") --Chọn danh mục cha--
+          if records
+            +renderOptions(records,0,product.parent_id)
+      
+      .form-group
+        label(for="description") Mô tả
+        textarea#description.form-control(
+          name="description"
+          rows="4"
+        ) #{product.description}
+      
+      .form-group
+        label(for="position") Vị trí
+        input#position.form-control(
+          type="number"
+          name="position"
+          min="0"
+          value=product.position
+        )
+      
+      
+      div.form-group(upload-image)
+      label(for="thumbnail") Ảnh
+      input#thumbnail.form-control-file(type="file" name="thumbnail" accept="image/*" upload-image-input)
+      
+      div.image-preview-wrapper(class=product.thumbnail ? '' : 'hidden')
+        img.image-preview(upload-image-preview src=product.thumbnail || '' alt="Ảnh xem trước")
+        button.remove-image(type="button" remove-image) ×
+      
+      .form-group
+        label Trạng thái
+        div
+          label.mr-3
+            input#statusActive.form-check-input(
+              type="radio"
+              name="status"
+              value="active"
+              checked=product.status === "active"
+            )
+            |  Hoạt động
+          label
+            input#statusInActive.form-check-input(
+              type="radio"
+              name="status"
+              value="inactive"
+              checked=product.status === "inactive"
+            )
+            |  Dừng hoạt động
+      
+      button.btn.btn-primary(type="submit") Cập nhật danh mục
+
+  else
+    p.text-danger Danh mục không tồn tại
+  
+  //- // Script được di chuyển vào trong block content
+  script(src="/admin/js/productCategory.js")

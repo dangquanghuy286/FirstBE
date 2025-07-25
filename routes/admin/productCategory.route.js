@@ -14,12 +14,21 @@ const uploadCloud = require("../../middlewares/admin/uploadClound.middleware");
 const validateController = require("../../validates/admin/productCategoryValidate");
 router.get("/", dashboardController.index);
 router.get("/create", dashboardController.create);
+router.get("/edit/:id", dashboardController.edit);
 router.post(
   "/create",
   upload.single("thumbnail"),
   uploadCloud.uploadCloud,
   validateController.createPost,
   dashboardController.createItem
+);
+
+router.patch(
+  "/edit/:id",
+  upload.single("thumbnail"),
+  uploadCloud.uploadCloud,
+  validateController.createPost,
+  dashboardController.editItem
 );
 
 module.exports = router;
