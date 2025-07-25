@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/selectTree.pug
 block content
   +alert-error(5000)
   +alert-success(5000)
@@ -8,6 +9,12 @@ block content
     div.form-group
       label(for="title") Tiêu đề
       input#title.form-control(type="text" name="title" value=product.title)
+    div.form-group
+      label(for="productCategory_id") Doanh mục 
+      select#productCategory_id.form-control(name="productCategory_id") 
+        option(value="") --Chọn doanh mục--
+        if(records)
+          +renderOptions(records,0,product.productCategory_id)
     div.form-group
       label(for="description") Mô tả
       textarea#description.form-control(name="description" rows="4") #{product.description}

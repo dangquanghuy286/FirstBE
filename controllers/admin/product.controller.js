@@ -178,9 +178,15 @@ module.exports.viewEdit = async (req, res) => {
     deleted: false,
     _id: req.params.id,
   };
+
   const product = await Product.findOne(find);
+  const records = await ProductCategory.find({
+    deleted: false,
+  });
+  const categoriesTree = createTree.createTree(records);
   res.render("admin/pages/products/edit", {
     product: product,
+    records: categoriesTree,
   });
 };
 //[PATCH]/admin/products/edit/:id
