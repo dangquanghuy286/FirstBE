@@ -61,17 +61,26 @@ module.exports.editRole = async (req, res) => {
   }
 };
 //[DELETE]/admin/roles/delete/:id(Tạm thời)
+// module.exports.deletedRole = async (req, res) => {
+//   const id = req.params.id;
+//   await Role.updateOne(
+//     {
+//       _id: id,
+//     },
+//     {
+//       deleted: true,
+//       deleteDate: new Date(),
+//     }
+//   );
+//   req.flash("success", `Xóa thành công vai trò với id ${id}!`);
+//   res.redirect(req.get("referer") || "/admin/roles");
+// };
+//[DELETE]/admin/roles/delete/:id(Vĩnh viễn)
 module.exports.deletedRole = async (req, res) => {
   const id = req.params.id;
-  await Role.updateOne(
-    {
-      _id: id,
-    },
-    {
-      deleted: true,
-      deleteDate: new Date(),
-    }
-  );
+  await Role.deleteOne({
+    _id: id,
+  });
   req.flash("success", `Xóa thành công vai trò với id ${id}!`);
   res.redirect(req.get("referer") || "/admin/roles");
 };
