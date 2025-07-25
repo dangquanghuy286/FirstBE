@@ -28,10 +28,19 @@ block content
                       span.badge(style="background-color: #6c757d; color: #fff;") Ẩn
 
 
-                .card-footer.text-right
+                .card-footer.text-right 
                   a.btn.btn-sm.btn-warning(href=`${prefixAdmin}/categories-product/edit/${product._id}`) Sửa
-                  a.btn.btn-sm.btn-danger.ml-2(href=`${prefixAdmin}/categories-product/delete/${product._id}` onclick="return confirm('Bạn có chắc muốn xoá?')") Xóa
+                  button(
+                    class="btn btn-danger btn-sm"
+                    button-Delete
+                    data-id=product.id
+                    ) Xóa
       else
         p.text-muted Chưa có danh mục nào.
-
-  script(src="/admin/js/product.js")
+  form(
+  action="" 
+  method="POST"
+  id="form-delete-item"
+  data-path=`${prefixAdmin}/categories-product/delete`
+  ) 
+  script(src="/admin/js/productCategory.js")

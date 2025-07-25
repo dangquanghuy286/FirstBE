@@ -31,4 +31,6 @@ router.patch(
   dashboardController.editItem
 );
 
+router.delete("/delete/:id", dashboardController.deleteItem);
+
 module.exports = router;

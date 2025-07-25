@@ -59,13 +59,11 @@ module.exports.edit = async (req, res) => {
 // [PATCH] /admin/categories-product/edit/:id
 module.exports.editItem = async (req, res) => {
   const id = req.params.id;
-
   try {
     // Xử lý position nếu có
     if (req.body.position) {
       req.body.position = parseInt(req.body.position);
     }
-
     // Update database
     await ProductCategory.updateOne({ _id: id }, req.body);
 
@@ -76,4 +74,24 @@ module.exports.editItem = async (req, res) => {
     req.flash("error", "Cập nhật danh mục thất bại!");
     res.redirect(`/admin/categories-product`);
   }
+};
+
+// Xóa cứng
+//[DELETE] /admin/product/delete/:id
+// module.exports.deleteItem = async (req, res) => {
+//   const id = req.params.id;
+//   await ProductCategory.deleteOne({ _id: id });
+//   res.redirect(req.get("referer") || "/admin/categories-product");
+// };
+
+// Xóa mềm(có thể khôi phục)
+// [DELETE] /admin/product/delete/:id
+module.exports.deleteItem = async (req, res) => {
+  const id = req.params.id;
+  await ProductCategory.updateOne(
+    { _id: id },
+    { deleted: true, deleteDate: new Date() }
+  );
+  req.flash("success", `Xóa thành công sản phẩm với id ${id}!`);
+  res.redirect(req.get("referer") || "/admin/categories-product");
 };
