@@ -13,7 +13,7 @@ module.exports.index = async (req, res) => {
   });
 };
 
-// [GET] /admin/categories-product
+// [GET] /admin/categories-product//create
 module.exports.create = async (req, res) => {
   let find = {
     deleted: false,

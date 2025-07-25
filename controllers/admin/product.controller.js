@@ -1,7 +1,10 @@
 const Product = require("../../models/product.model");
+const ProductCategory = require("../../models/productCategory.model");
 const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const pagination = require("../../helpers/pagination");
+const createTree = require("../../helpers/createTree");
+
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
   let find = {
@@ -139,7 +142,16 @@ module.exports.deleteItem = async (req, res) => {
 };
 //[GET] /admin/create
 module.exports.create = async (req, res) => {
-  res.render("admin/pages/products/create"), {};
+  let find = {
+    deleted: false,
+  };
+
+  const records = await ProductCategory.find(find);
+  const categoriesTree = createTree.createTree(records);
+  res.render("admin/pages/products/create", {
+    title: "Tạo mới sản phẩm !",
+    records: categoriesTree,
+  });
 };
 //[POST] /admin/create
 module.exports.createItem = async (req, res) => {

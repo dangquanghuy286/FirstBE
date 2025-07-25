@@ -4,6 +4,10 @@ const slugify = require("slugify");
 const productSchema = new mongoose.Schema(
   {
     title: String,
+    productCategory_id: {
+      type: String,
+      default: "",
+    },
     slug: {
       type: String,
       unique: true,

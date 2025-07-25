@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/selectTree.pug
 block content
   +alert-error(5000)
   h1.mb-4 Thêm mới sản phẩm
@@ -7,6 +8,13 @@ block content
     div.form-group
       label(for="title") Tiêu đề
       input#title.form-control(type="text" name="title" )
+
+    div.form-group
+      label(for="productCategory_id") Doanh mục 
+      select#productCategory_id.form-control(name="productCategory_id") 
+        option(value="") --Chọn doanh mục--
+        if(records)
+          +renderOptions(records)
 
     div.form-group
       label(for="description") Mô tả

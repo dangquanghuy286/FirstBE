@@ -57,7 +57,7 @@ block content
                 td= index + 1
                 td= product.title
                 td= product.price
-                td= product.description
+                td!= product.description
                 td
                   img(src=product.thumbnail, alt=product.title, style="width: 100px; height: auto;")
                 td 
