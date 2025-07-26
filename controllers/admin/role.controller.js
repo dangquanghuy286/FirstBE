@@ -84,3 +84,36 @@ module.exports.deletedRole = async (req, res) => {
   req.flash("success", `Xóa thành công vai trò với id ${id}!`);
   res.redirect(req.get("referer") || "/admin/roles");
 };
+// [GET] /admin/roles/permissions
+module.exports.permissions = async (req, res) => {
+  let find = {
+    deleted: false,
+  };
+  const records = await Role.find(find);
+  res.render("admin/pages/role/permissions", {
+    title: "Setting Roles",
+    records: records,
+  });
+};
+// [PATCH] /admin/roles/permissions
+module.exports.permissionsPatch = async (req, res) => {
+  const permissions = JSON.parse(req.body.permissions);
+  try {
+    for (const item of permissions) {
+      await Role.updateOne(
+        {
+          _id: item.id,
+        },
+        {
+          permission: item.permissions,
+        }
+      );
+    }
+    req.flash("success", "Cập nhật nhóm quyền thành công!");
+    res.redirect("/admin/roles/permissions");
+  } catch (error) {
+    console.error("Error updating category:", error);
+    req.flash("error", "Cập nhật nhóm quyền thất bại!");
+    res.redirect(`/admin/roles/permissions`);
+  }
+};
