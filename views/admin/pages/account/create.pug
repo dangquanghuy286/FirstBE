@@ -1,0 +1,51 @@
+extends ../../layouts/default.pug   
+include ../../mixins/alert.pug
+
+block content 
+    h1(class="mb-4") Thêm tài khoản mới 
+    +alert-error(5000)
+
+    form(action=`${prefixAdmin}/accounts/create`, method="POST", enctype="multipart/form-data")
+        div(class="form-group")
+            label(for="fullName") Họ tên *
+            input#fullName.form-control(type="text", name="fullName", required)
+        
+        div(class="form-group")
+            label(for="email") Email *
+            input#email.form-control(type="text", name="email", required)
+        div(class="form-group")
+            label(for="phone") Số điện thoại *
+            input#phone.form-control(type="number", name="phone", required)
+        
+        div(class="form-group")
+            label(for="password") Mật khẩu *
+            input#password.form-control(type="password", name="password", required)
+        
+        div.form-group(upload-image)
+            label(for="avatar") Ảnh
+            input#avatar.form-control-file(type="file" name="avatar" accept="image/*" upload-image-input)
+  
+  
+        div.image-preview-wrapper
+            img.image-preview(upload-image-preview src="" alt="Ảnh xem trước")
+            button.remove-image(type="button" remove-image) ×
+        
+        div(class="form-group")
+            label(for="roleId") Phân quyền *
+            select#roleId.form-control(name="roleId" required)
+                option(disabled selected) --Chọn--
+                option(value="admin") Quản trị viên
+                option(value="user") Người dùng
+        
+        div.form-group
+            label Trạng thái
+            div
+                label.form-check-label.mr-3
+                    input#statusActive.form-check-input(type="radio", name="status", value="active", checked)
+                    | Hoạt động
+                label.form-check-label
+                    input#statusInActive.form-check-input(type="radio", name="status", value="inactive")
+                    | Dừng hoạt động
+        
+        div(class="form-group")
+            button(type="submit", class="btn btn-primary") Tạo mới
