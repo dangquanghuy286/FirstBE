@@ -9,6 +9,9 @@ block content
         div(class="form-group")
             label(for="fullName") Họ tên *
             input#fullName.form-control(type="text", name="fullName", required)
+        div(class="form-group")
+            label(for="userName") Username *
+            input#userName.form-control(type="text", name="userName", required)
         
         div(class="form-group")
             label(for="email") Email *
@@ -34,8 +37,8 @@ block content
             label(for="roleId") Phân quyền *
             select#roleId.form-control(name="roleId" required)
                 option(disabled selected) --Chọn--
-                option(value="admin") Quản trị viên
-                option(value="user") Người dùng
+                each item in roles 
+                    option(value=item.id) #{item.title} 
         
         div.form-group
             label Trạng thái
