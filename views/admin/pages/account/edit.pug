@@ -1,0 +1,68 @@
+extends ../../layouts/default.pug   
+include ../../mixins/alert.pug
+
+block content 
+  h1.mb-4 Sửa tài khoản
+  +alert-error(5000)
+
+  form(action=`${prefixAdmin}/accounts/edit/${account._id}?_method=PATCH`, method="POST", enctype="multipart/form-data")
+    .form-group
+      label(for="fullName") Họ tên *
+      input#fullName.form-control(type="text", name="fullName", required, value=account.fullName)
+
+    .form-group
+      label(for="userName") Username *
+      input#userName.form-control(type="text", name="userName", required, value=account.userName)
+
+    .form-group
+      label(for="email") Email *
+      input#email.form-control(type="email", name="email", required, value=account.email)
+
+    .form-group
+      label(for="phone") Số điện thoại *
+      input#phone.form-control(type="number", name="phone", required, value=account.phone)
+
+    .form-group
+      label(for="password") Mật khẩu *
+      input#password.form-control(type="password", name="password")
+
+    .form-group(upload-image)
+      label(for="avatar") Ảnh
+      input#avatar.form-control-file(type="file", name="avatar", accept="image/*", upload-image-input)
+
+    .image-preview-wrapper
+      if account.avatar
+        img.image-preview(upload-image-preview src=account.avatar alt="Ảnh xem trước")
+      else
+        img.image-preview(upload-image-preview src="" alt="Ảnh xem trước")
+      button.remove-image(type="button", remove-image) ×
+
+    .form-group
+      label(for="roleId") Phân quyền *
+      select#roleId.form-control(name="roleId" required)
+        option(disabled selected)= '--Chọn--'
+        each item in roles 
+          option(value=item.id selected=(account.roleId == item.id)) #{item.title}
+
+    .form-group
+      label Trạng thái
+      div
+        label.form-check-label.mr-3
+          input#statusActive.form-check-input(
+            type="radio",
+            name="status",
+            value="active",
+            checked=account.status === 'active'
+          )
+          | Hoạt động
+        label.form-check-label
+          input#statusInActive.form-check-input(
+            type="radio",
+            name="status",
+            value="inactive",
+            checked=account.status === 'inactive'
+          )
+          | Dừng hoạt động
+
+    .form-group
+      button.btn.btn-primary(type="submit") Cập nhật

@@ -1,7 +1,9 @@
 extends ../../layouts/default.pug
-
+include ../../mixins/alert.pug
 block content 
+  +alert-success("5000")
   h1.mb-4 Danh sách tài khoản 
+  
   .card.mb-3 
     .card-header Danh sách 
 
@@ -68,3 +70,4 @@ block content
             else
               tr
                 td.text-center(colspan="6") Không có dữ liệu
+    
