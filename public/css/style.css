@@ -11,27 +11,42 @@ header.header {
   border-bottom: 1px solid #ddd;
 }
 
-.header .container {
+.header .container-fluid {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.logo {
+.inner-logo {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.logo img {
-  width: 50px;
-}
-
-.logo h1 {
-  font-size: 24px;
+.inner-logo a {
+  font-size: 20px;
+  font-weight: bold;
   color: #333;
 }
 
+.text-right {
+  text-align: right;
+}
+
+.text-right .btn {
+  padding: 6px 12px;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.text-right .btn:hover {
+  background-color: #c82333;
+}
+
+/* NAV MENU (nếu dùng sau này) */
 nav.nav ul.menu {
   list-style: none;
   display: flex;
@@ -49,20 +64,6 @@ nav.nav ul.menu li a:hover {
   color: #007bff;
 }
 
-/* AUTH BUTTON */
-.auth .btn {
-  padding: 6px 12px;
-  background-color: #007bff;
-  color: white;
-  border-radius: 4px;
-  text-decoration: none;
-  transition: background-color 0.3s;
-}
-
-.auth .btn:hover {
-  background-color: #0056b3;
-}
-
 /* FOOTER */
 footer {
   background-color: #f1f1f1;
@@ -75,6 +76,8 @@ footer {
 footer p {
   margin: 0;
 }
+
+/* TABLE */
 .table-striped {
   width: 100%;
   border-collapse: collapse;
@@ -95,6 +98,7 @@ footer p {
   text-align: left;
 }
 
+/* PRODUCT GRID */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -105,8 +109,9 @@ footer p {
   display: flex;
 }
 
+/* GENERAL LINK */
 a {
-  text-decoration: none;
+  color: inherit;
 }
 
 a:hover {
