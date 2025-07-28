@@ -1,0 +1,17 @@
+extends ../../layouts/auth.pug
+include ../../mixins/alert.pug
+block content
+  +alert-error("5000")
+  .container.my-5 
+    .row.justify-content-center 
+      .col-8 
+        h1.text-center Đăng nhập 
+        form(action=`${prefixAdmin}/auth/login`, method="POST")
+          .form-group
+            label(for="userName") Tên đăng nhập
+            input#userName.form-control(type="text", name="userName" )
+          .form-group 
+            label(for="password") Mật khẩu 
+            input#password.form-control(type="password", name="password" ) 
+          .form-group
+            button.btn.btn-primary.btn-block(type="submit") Đăng Nhập
