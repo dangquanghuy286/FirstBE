@@ -1,5 +1,5 @@
 const systemConfig = require("../../config/system");
-
+const authMid = require("../../middlewares/admin/auth.middleware");
 const dashboardRoute = require("./dashboard.route");
 const productRoute = require("./product.route");
 const productCategory = require("./productCategory.route");
@@ -8,10 +8,22 @@ const account = require("./account.route");
 const auth = require("./auth.route");
 
 module.exports = (app) => {
-  app.use(`${systemConfig.prefixAdmin}/dashboard`, dashboardRoute);
-  app.use(`${systemConfig.prefixAdmin}/products`, productRoute);
-  app.use(`${systemConfig.prefixAdmin}/categories-product`, productCategory);
-  app.use(`${systemConfig.prefixAdmin}/roles`, role);
-  app.use(`${systemConfig.prefixAdmin}/accounts`, account);
+  app.use(
+    `${systemConfig.prefixAdmin}/dashboard`,
+    authMid.requireAuth,
+    dashboardRoute
+  );
+  app.use(
+    `${systemConfig.prefixAdmin}/products`,
+    authMid.requireAuth,
+    productRoute
+  );
+  app.use(
+    `${systemConfig.prefixAdmin}/categories-product`,
+    authMid.requireAuth,
+    productCategory
+  );
+  app.use(`${systemConfig.prefixAdmin}/roles`, authMid.requireAuth, role);
+  app.use(`${systemConfig.prefixAdmin}/accounts`, authMid.requireAuth, account);
   app.use(`${systemConfig.prefixAdmin}/auth`, auth);
 };
