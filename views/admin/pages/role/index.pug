@@ -2,49 +2,54 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block content
-  h1.mb-4 Permission Group
+  if(role.permission.includes("roles_view"))
+    h1.mb-4 Permission Group
 
-  +alert-success("5000")
-  +alert-error("5000")
+    +alert-success("5000")
+    +alert-error("5000")
 
-  .card.mb-3 
-    .card-header Danh sách 
-    .card-body 
-      .row
-        .col-8
-        .col-4.text-end
-          a.btn.btn-outline-success(href=`${prefixAdmin}/roles/create`) + Thêm mới
+    .card.mb-3 
+      .card-header Danh sách 
+      .card-body 
+        .row
+          .col-8
+          .col-4.text-end
+            if(role.permission.includes("roles_create"))  
+              a.btn.btn-outline-success(href=`${prefixAdmin}/roles/create`) + Thêm mới
 
-      table.table.table-hover.table-sm
-        thead 
-          tr 
-            th STT
-            th Nhóm quyền
-            th Mô tả ngắn 
-            th Hành động 
-        tbody 
-          if records.length > 0
-            each item, index in records 
-              tr 
-                td #{index + 1}
-                td #{item.title}
-                td #{item.description}
-                td
-                  a.btn.btn-secondary.btn-sm.me-1(href=`${prefixAdmin}/roles/detail/${item.id}`) View
-                  a.btn.btn-warning.btn-sm.me-1(href=`${prefixAdmin}/roles/edit/${item.id}`) Edit
-                  button.btn.btn-danger.btn-sm(
-                    type="button",
-                    data-id=item.id,
-                    button-Delete
-                  ) Delete
-          else
-            tr
-              td(colspan="4") Không có nhóm quyền nào.
+        table.table.table-hover.table-sm
+          thead 
+            tr 
+              th STT
+              th Nhóm quyền
+              th Mô tả ngắn 
+              th Hành động 
+          tbody 
+            if records.length > 0
+              each item, index in records 
+                tr 
+                  td #{index + 1}
+                  td #{item.title}
+                  td #{item.description}
+                  td
+                    if(role.permission.includes("roles_view"))  
+                      a.btn.btn-secondary.btn-sm.me-1(href=`${prefixAdmin}/roles/detail/${item.id}`) View
+                    if(role.permission.includes("roles_edit"))  
+                      a.btn.btn-warning.btn-sm.me-1(href=`${prefixAdmin}/roles/edit/${item.id}`) Edit
+                    if(role.permission.includes("roles_delete"))
+                      button.btn.btn-danger.btn-sm(
+                        type="button",
+                        data-id=item.id,
+                        button-Delete
+                      ) Delete
+            else
+              tr
+                td(colspan="4") Không có nhóm quyền nào.
 
-  form#form-delete-item(
-    action="" 
-    method="POST"
-    data-path=`${prefixAdmin}/roles/delete`
-  )
+    form#form-delete-item(
+      action="" 
+      method="POST"
+      data-path=`${prefixAdmin}/roles/delete`
+    )
 
-  script(src="/admin/js/product.js")
+    script(src="/admin/js/product.js")

@@ -1,15 +1,22 @@
 const Account = require("../../models/account.model");
+const Role = require("../../models/role.model");
 
 module.exports.requireAuth = async (req, res, next) => {
-  if (!req.cookie.token) {
+  if (!req.cookies.token) {
     res.redirect("/admin/auth/login");
   } else {
     const user = await Account.findOne({
-      token: req.cookie.token,
-    });
+      token: req.cookies.token,
+    }).select("-password");
     if (!user) {
       res.redirect("/admin/auth/login");
     } else {
+      const role = await Role.findOne({
+        _id: user.roleId,
+      }).select("title permission");
+
+      res.locals.user = user;
+      res.locals.role = role;
       next();
     }
   }

@@ -1,73 +1,79 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 block content 
-  +alert-success("5000")
-  h1.mb-4 Danh sách tài khoản 
-  
-  .card.mb-3 
-    .card-header Danh sách 
-
-    .row 
-      .col-8 
-      .col-4.text-right 
-        a.btn.btn-outline-success(href=`${prefixAdmin}/accounts/create`) +Thêm mới
-
-    .card-body
-      .table-responsive
-        table.table.table-striped.table-hover
-          thead.table-dark
-            tr
-              th(style="width: 80px") Ảnh
-              th Tên đăng nhập
-              th Họ tên đầy đủ
-              th Email
-              th Trạng thái
-              th Quyền
-              th(style="width: 150px") Hành động
-
-          tbody
-            if records && records.length > 0
-              each account in records
-                tr
-                  td
-                    if account.avatar
-                      img.rounded-circle(
-                        src=account.avatar,
-                        alt="Avatar",
-                        style="width: 50px; height: 50px; object-fit: cover"
-                      )
-                    else
-                      .bg-secondary.rounded-circle.d-flex.align-items-center.justify-content-center(
-                        style="width: 50px; height: 50px; color: white"
-                      )
-                        i.fas.fa-user
-
-                  td= account.userName || 'N/A'
-                  td= account.fullName || 'N/A'
-                  td= account.email || 'N/A'
-
-                  td
-                    if account.status === 'active'
-                      span.badge.bg-success Hoạt động
-                    else if account.status === 'inactive'
-                      span.badge.bg-warning Không hoạt động
-                    else
-                      span.badge.bg-secondary Chưa xác định
-                  td= account.role.title
-
-                  td
-                    a.btn.btn-secondary.btn-sm.me-1(
-                      href=`${prefixAdmin}/accounts/detail/${account.id}`
-                    ) View
-                    a.btn.btn-warning.btn-sm.me-1(
-                      href=`${prefixAdmin}/accounts/edit/${account.id}`
-                    ) Edit
-                    button.btn.btn-danger.btn-sm(
-                      type="button",
-                      button-Delete,
-                      data-id=account.id
-                    ) Delete
-            else
-              tr
-                td.text-center(colspan="6") Không có dữ liệu
+  if(role.permission.includes("account_view"))
+    +alert-success("5000")
+    h1.mb-4 Danh sách tài khoản 
     
+    .card.mb-3 
+      .card-header Danh sách 
+
+      .row 
+        .col-8 
+        .col-4.text-right 
+            
+          if(role.permission.includes("account_create"))  
+            a.btn.btn-outline-success(href=`${prefixAdmin}/accounts/create`) +Thêm mới
+
+      .card-body
+        .table-responsive
+          table.table.table-hover
+            thead
+              tr
+                th(style="width: 80px") Ảnh
+                th Tên đăng nhập
+                th Họ tên đầy đủ
+                th Email
+                th Trạng thái
+                th Quyền
+                th(style="width: 150px") Hành động
+
+            tbody
+              if records && records.length > 0
+                each account in records
+                  tr
+                    td
+                      if account.avatar
+                        img.rounded-circle(
+                          src=account.avatar,
+                          alt="Avatar",
+                          style="width: 50px; height: 50px; object-fit: cover"
+                        )
+                      else
+                        .bg-secondary.rounded-circle.d-flex.align-items-center.justify-content-center(
+                          style="width: 50px; height: 50px; color: white"
+                        )
+                          i.fas.fa-user
+
+                    td= account.userName || 'N/A'
+                    td= account.fullName || 'N/A'
+                    td= account.email || 'N/A'
+
+                    td
+                      if account.status === 'active'
+                        span.badge.bg-success Hoạt động
+                      else if account.status === 'inactive'
+                        span.badge.bg-warning Không hoạt động
+                      else
+                        span.badge.bg-secondary Chưa xác định
+                    td= account.role.title
+
+                    td
+                      if(role.permission.includes("account_view"))
+                        a.btn.btn-secondary.btn-sm.me-1(
+                          href=`${prefixAdmin}/accounts/detail/${account.id}`
+                        ) View
+                      if(role.permission.includes("account_edit"))
+                        a.btn.btn-warning.btn-sm.me-1(
+                          href=`${prefixAdmin}/accounts/edit/${account.id}`
+                        ) Edit
+                      if(role.permission.includes("account_delete"))
+                        button.btn.btn-danger.btn-sm(
+                          type="button",
+                          button-Delete,
+                          data-id=account.id
+                        ) Delete
+              else
+                tr
+                  td.text-center(colspan="6") Không có dữ liệu
+      

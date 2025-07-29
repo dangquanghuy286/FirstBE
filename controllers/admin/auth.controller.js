@@ -3,7 +3,7 @@ var md5 = require("md5");
 
 // [GET] /admin/auth/login
 module.exports.login = (req, res) => {
-  if (req.cookie.token) {
+  if (req.cookies.token) {
     res.redirect("/admin/dashboard");
   } else {
     res.render("admin/pages/auth/login", { title: "Login" });

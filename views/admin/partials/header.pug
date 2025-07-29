@@ -1,12 +1,6 @@
 header.header
   .container-fluid
-    .row.align-items-center
-      .col-3
-        .inner-logo
-          a(href="/admin/dashboard") ADMIN
-      .col-9
-        div.text-right
-          a(
-            href=`${prefixAdmin}/auth/logout`,
-            class="btn btn-danger btn-sm"
-          ) Đăng xuất
+    .inner-logo
+      a(href="/admin/dashboard") Admin Panel
+    .text-right
+      a.btn.btn-danger(href=`${prefixAdmin}/auth/logout`) Đăng xuất

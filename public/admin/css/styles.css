@@ -1,22 +1,84 @@
+/* Header Styles */
+header.header {
+  background: linear-gradient(to right, #f8f9fa, #ffffff);
+  border-bottom: 1px solid #dee2e6;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+header.header .container-fluid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+}
+
+header.header .inner-logo a {
+  font-size: 1.75rem;
+  font-weight: 800;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #343a40;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+
+header.header .inner-logo a:hover {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+header.header .text-right a.btn {
+  background-color: #dc3545;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+header.header .text-right a.btn:hover {
+  background-color: #bb2d3b;
+  transform: scale(1.05);
+  text-decoration: none;
+}
+
+/* Đảm bảo header tương thích với sidebar và content */
 .wrapper {
   display: flex;
+  margin-top: 70px; /* Khoảng cách để tránh header che khuất nội dung */
 }
 
 .sidebar {
   width: 220px;
   background-color: #f8f9fa;
   padding: 1rem;
-  height: 100vh;
+  height: calc(100vh - 70px); /* Trừ chiều cao header */
+  position: fixed;
+  top: 70px;
+  left: 0;
+  overflow-y: auto;
 }
 
 .content {
   flex-grow: 1;
   padding: 1rem;
+  margin-left: 220px; /* Khoảng cách để sidebar không che content */
   margin-bottom: 20px;
 }
+
+/* Link Styles (ghi đè để đồng bộ với header) */
 a {
   text-decoration: none;
+  color: #007bff;
 }
+
 a:hover {
   text-decoration: underline;
 }
@@ -28,11 +90,13 @@ a:hover {
   right: 15px;
   z-index: 9999;
 }
+
 [showAlert].alert-hidden {
   animation-name: alert-hidden;
   animation-duration: 0.5s;
   animation-fill-mode: both;
 }
+
 @keyframes alert-hidden {
   from {
     right: 15px;
@@ -42,6 +106,7 @@ a:hover {
     display: none;
   }
 }
+
 [showAlert] [close-alert] {
   background: #ffffffc4;
   display: inline-block;
@@ -53,7 +118,8 @@ a:hover {
   border-radius: 50%;
   cursor: pointer;
 }
-/* CSS đã sửa */
+
+/* Image Preview */
 .image-preview-wrapper {
   position: relative;
   display: flex;
