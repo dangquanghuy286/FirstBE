@@ -3,7 +3,8 @@ const express = require("express");
 
 // Thư viện hỗ trợ gửi request với method khác như PUT, DELETE thông qua form (HTML chỉ hỗ trợ GET và POST)
 var methodOverride = require("method-override");
-
+//Thu vien moment
+const moment = require("moment");
 //Thư viện hỗ trợ TinyMCE
 var path = require("path");
 
@@ -51,6 +52,8 @@ app.use(bodyParser.urlencoded());
 
 // Biến toàn cục dùng trong view engine (Pug) – ví dụ dùng để hiển thị đường dẫn prefix admin
 app.locals.prefixAdmin = systemconfig.prefixAdmin;
+// Biến toàn cục dùng trong view engine (Pug) – ví dụ dùng để hiển thị đường dẫn prefix admin
+app.locals.moment = moment;
 
 // Cấu hình thư mục views và view engine là pug
 app.set("views", `${__dirname}/views`);

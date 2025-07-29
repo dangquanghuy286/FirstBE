@@ -50,6 +50,7 @@ block content
                 th Position
                 th Actions
                 th Status
+                th By
             tbody
               each product, index in products
                 tr
@@ -102,7 +103,12 @@ block content
                       ) Inactive
                     else
                       span(class="badge bg-danger") Unknown Status
-      
+                  td
+                    if(product.createdBy && product.createdBy.account_id && product.createdBy.createAt)
+                      p #{product.accFullname || 'Unknown User'} 
+                      p Cập nhật: #{moment(product.createdBy.createAt).calendar()} (#{moment(product.createdBy.createAt).fromNow()})
+                    else
+                      p Không có thông tin
 
     else
       p No products available.

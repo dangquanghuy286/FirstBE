@@ -4,7 +4,7 @@ include ../../mixins/alert.pug
 block content
   if(role.permission.includes("roles_view"))
     h1.mb-4 Permission Group
-
+    
     +alert-success("5000")
     +alert-error("5000")
 

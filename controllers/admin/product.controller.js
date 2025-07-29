@@ -4,6 +4,7 @@ const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const pagination = require("../../helpers/pagination");
 const createTree = require("../../helpers/createTree");
+const Account = require("../../models/account.model");
 
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
@@ -51,7 +52,14 @@ module.exports.index = async (req, res) => {
     .sort(sort)
     .limit(objectPagination.limit)
     .skip(objectPagination.skip);
-
+  for (const product of products) {
+    const user = await Account.findOne({
+      _id: product.createdBy.account_id,
+    });
+    if (user) {
+      product.accFullname = user.fullName;
+    }
+  }
   res.render("admin/pages/products/index", {
     title: "Product Management",
     products: products,
@@ -97,7 +105,10 @@ module.exports.changeMulti = async (req, res) => {
         { _id: { $in: ids } },
         {
           deleted: true,
-          deleteDate: new Date(),
+          deleteBy: {
+            account_id: res.locals.user.id,
+            deleteDate: new Date(),
+          },
         }
       );
       req.flash("success", `Xóa thành công ${ids.length} sản phẩm!`);
@@ -135,7 +146,13 @@ module.exports.deleteItem = async (req, res) => {
   const id = req.params.id;
   await Product.updateOne(
     { _id: id },
-    { deleted: true, deleteDate: new Date() }
+    {
+      deleted: true,
+      deleteBy: {
+        account_id: res.locals.user.id,
+        deleteDate: new Date(),
+      },
+    }
   );
   req.flash("success", `Xóa thành công sản phẩm với id ${id}!`);
   res.redirect(req.get("referer") || "/admin/products");
@@ -158,7 +175,9 @@ module.exports.createItem = async (req, res) => {
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
-
+  req.body.createdBy = {
+    account_id: res.locals.user.id,
+  };
   if (req.body.position == "") {
     const countProducts = await Product.countDocuments();
     req.body.position = countProducts + 1;
