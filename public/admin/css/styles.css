@@ -33,8 +33,7 @@ header.header .inner-logo a:hover {
   text-decoration: none;
 }
 
-header.header .text-right a.btn {
-  background-color: #dc3545;
+header.header .text-right {
   color: #fff;
   font-size: 0.9rem;
   font-weight: 500;
@@ -43,8 +42,7 @@ header.header .text-right a.btn {
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-header.header .text-right a.btn:hover {
-  background-color: #bb2d3b;
+header.header .text-right {
   transform: scale(1.05);
   text-decoration: none;
 }

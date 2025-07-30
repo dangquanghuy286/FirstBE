@@ -64,9 +64,10 @@ module.exports.index = async (req, res) => {
 
     // Lấy thông tin người cập nhật gần nhất
 
-    const lastUpdated = product.updatedBy.slice(-1)[0];
+    const lastUpdated = product.updatedBy.at(-1);
+
     if (lastUpdated) {
-      const user = await Account.findOne({ _id: lastUpdated.account_id });
+      const user = await Account.findById(lastUpdated.account_id);
       if (user) {
         lastUpdated.accountFullName = user.fullName;
       }

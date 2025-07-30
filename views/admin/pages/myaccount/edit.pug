@@ -1,0 +1,38 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block content
+  +alert-success("5000")  
+  h1 Cập nhật thông tin người dùng
+
+  form(method="POST", action=`/admin/my-account/edit?_method=PATCH`, enctype="multipart/form-data")
+    .form-group
+      if user.avatar
+        img(src=user.avatar, alt="Avatar", width="100", height="100", style="margin-top: 10px; border-radius: 50%")
+
+    .form-group
+      label(for="avatar") Ảnh đại diện mới
+      input#avatar.form-control(type="file", name="avatar", accept="image/*")
+
+    .form-group
+      label(for="fullName") Họ tên
+      input#fullName.form-control(type="text", name="fullName", required, value=user.fullName)
+
+    .form-group
+      label(for="userName") Tên đăng nhập
+      input#userName.form-control(type="text", name="userName", required, value=user.userName)
+
+    .form-group
+      label(for="email") Email
+      input#email.form-control(type="email", name="email", required, value=user.email)
+
+    .form-group
+      label(for="phone") Số điện thoại
+      input#phone.form-control(type="text", name="phone", required, value=user.phone)
+
+    .form-group
+      label(for="status") Trạng thái
+      select#status.form-control(name="status")
+        option(value="active", selected=user.status === 'active') active
+        option(value="inactive", selected=user.status === 'inactive') inactive
+
+    button.btn.btn-primary(type="submit") Cập nhật

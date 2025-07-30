@@ -162,7 +162,6 @@ if (sort) {
   let url = new URL(window.location.href);
   const sortSelect = sort.querySelector("[sort-select]");
   const sortClear = sort.querySelector("[sort-clear]");
-  console.log(sortClear);
 
   if (sortSelect) {
     sortSelect.addEventListener("change", (e) => {

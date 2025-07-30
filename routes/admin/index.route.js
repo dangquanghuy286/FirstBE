@@ -6,6 +6,7 @@ const productCategory = require("./productCategory.route");
 const role = require("./role.route");
 const account = require("./account.route");
 const auth = require("./auth.route");
+const myaccount = require("./myaccount.route");
 
 module.exports = (app) => {
   app.use(
@@ -25,5 +26,10 @@ module.exports = (app) => {
   );
   app.use(`${systemConfig.prefixAdmin}/roles`, authMid.requireAuth, role);
   app.use(`${systemConfig.prefixAdmin}/accounts`, authMid.requireAuth, account);
+  app.use(
+    `${systemConfig.prefixAdmin}/my-account`,
+    authMid.requireAuth,
+    myaccount
+  );
   app.use(`${systemConfig.prefixAdmin}/auth`, auth);
 };
