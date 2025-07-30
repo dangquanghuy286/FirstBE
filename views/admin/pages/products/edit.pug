@@ -44,7 +44,16 @@ block content
         label
           input#statusInActive.form-check-input(type="radio" name="status" value="inactive" checked=(product.status === 'inactive'))
           |  Dừng hoạt động
-      
+    div.form-group
+      label Nổi bật
+      div
+        label.mr-3
+          input#featured1.form-check-input(type="radio" name="featured" value="1" checked=(product.featured === '1'))
+          |  Nổi bật
+        label
+          input#featured0.form-check-input(type="radio" name="featured" value="0" checked=(product.featured === '0'))
+          |  Không
+    
     div.form-group
       label(for="position") Vị trí
       input#position.form-control(type="number" name="position" min="0" value=product.position)

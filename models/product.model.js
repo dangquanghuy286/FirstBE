@@ -26,6 +26,7 @@ const productSchema = new mongoose.Schema(
         default: Date.now,
       },
     },
+    featured: String,
     deleted: {
       type: Boolean,
       default: false,
