@@ -18,6 +18,5 @@ block content
         h4.text-danger.mb-3 $#{product.price}
         p
           strong Description:
-        p.lead= product.description
-
+        p.lead !{product.description}
         a.btn.btn-primary.mt-3(href="/products") ← Back to Products

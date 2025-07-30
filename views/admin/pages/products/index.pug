@@ -50,7 +50,8 @@ block content
                 th Position
                 th Actions
                 th Status
-                th By
+                th Create By
+                th Update By
             tbody
               each product, index in products
                 tr
@@ -106,7 +107,16 @@ block content
                   td
                     if(product.createdBy && product.createdBy.account_id && product.createdBy.createAt)
                       p #{product.accFullname || 'Unknown User'} 
-                      p Cập nhật: #{moment(product.createdBy.createAt).calendar()} (#{moment(product.createdBy.createAt).fromNow()})
+                      p Tạo: #{moment(product.createdBy.createAt).calendar()} (#{moment(product.createdBy.createAt).fromNow()})
+                    else
+                      p Không có thông tin
+                  td
+                    - const lastUpdated = product.updatedBy && product.updatedBy.length > 0 ? product.updatedBy[product.updatedBy.length - 1] : null
+                    if lastUpdated && lastUpdated.account_id && lastUpdated.updatedAt
+                      p 
+                        b #{product.accountFullName || 'Unknown User'} 
+                      p 
+                        i Cập nhật: #{moment(lastUpdated.updatedAt).calendar()} (#{moment(lastUpdated.updatedAt).fromNow()})
                     else
                       p Không có thông tin
 

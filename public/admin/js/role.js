@@ -39,9 +39,6 @@ if (tablePermissions) {
       }
     });
 
-    // In ra kết quả mảng permissions để kiểm tra
-    console.log(permissions);
-
     // Kiểm tra và gửi dữ liệu
     if (permissions.length > 0) {
       const formChange = document.querySelector("[form-change-permissions]");
