@@ -7,13 +7,13 @@ block content
       .product-item
         .card.h-100.product-card
           if product.thumbnail
-            img.card-img-top(src=product.thumbnail alt=product.title style="height: 200px; object-fit: cover;")
+            img.card-img-top(src=product.thumbnail, alt=product.title)
           else
-            .card-img-top.bg-light.d-flex.align-items-center.justify-content-center(style="height: 200px;")
-              i.fas.fa-image.text-muted.fa-3x
+            .card-img-top.no-thumbnail
+              i.fas.fa-image
           .card-body
             h5.card-title 
-              a(href=`/product/${product.slug}` )= product.title
+              a(href=`/product/${product.slug}`)= product.title
             .card-text
               p.mb-2
                 strong ID: 
@@ -23,4 +23,5 @@ block content
                 span.price-tag $#{product.price}
               p.mb-0
                 strong Description: 
-                span.description-text= product.description
+                span.description-text !{product.description}
+

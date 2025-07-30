@@ -5,7 +5,10 @@ module.exports.index = async (req, res) => {
     status: "active",
     deleted: false,
   }).sort({ position: "desc" });
-  res.render("client/pages/product/index", { products });
+  res.render("client/pages/product/index", {
+    title: "Products",
+    products,
+  });
 };
 
 // [GET]/products/:slug
