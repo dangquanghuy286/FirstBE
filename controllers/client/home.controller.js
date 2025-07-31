@@ -7,11 +7,21 @@ module.exports.index = async (req, res) => {
     featured: "1",
     deleted: false,
     status: "active",
-  });
-  console.log(featureProduct);
+  }).limit(4);
+
+  //Lấy ra sản phẩm mới nhất
+  const newProduct = await Product.find({
+    deleted: false,
+    status: "active",
+  })
+    .sort({
+      position: "desc",
+    })
+    .limit(8);
 
   res.render("client/pages/home/index", {
     title: "Home",
     featureProduct: featureProduct,
+    newProduct: newProduct,
   });
 };
