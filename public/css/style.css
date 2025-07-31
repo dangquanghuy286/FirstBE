@@ -201,3 +201,82 @@ header.header .container {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   text-transform: uppercase;
 }
+/* === Product Detail Page === */
+
+.product-detail-container {
+  margin-top: 40px;
+}
+
+.product-detail-container .img-fluid {
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-detail-container .placeholder-img {
+  height: 400px;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-detail-container .placeholder-img i {
+  color: #adb5bd;
+  font-size: 72px;
+}
+
+.product-detail-container h2 {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.product-detail-container .badge {
+  font-size: 14px;
+  padding: 6px 10px;
+}
+
+.price-section h4 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.price-section s {
+  font-size: 16px;
+  color: #888;
+}
+
+.price-section .badge-danger {
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.stock-info {
+  font-size: 16px;
+}
+
+.description-content {
+  font-size: 15px;
+  color: #333;
+}
+
+.product-dates p {
+  margin-bottom: 6px;
+}
+
+.form-group input[type="number"] {
+  width: 100px;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+button.btn-success i {
+  margin-right: 6px;
+}
+
+a.btn-outline-primary {
+  margin-top: 20px;
+}

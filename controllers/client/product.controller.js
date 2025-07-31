@@ -17,7 +17,7 @@ module.exports.detail = async (req, res) => {
   try {
     const find = {
       deleted: false,
-      slug: req.params.slug,
+      slug: req.params.slugCategory,
       status: "active",
     };
 
@@ -26,8 +26,16 @@ module.exports.detail = async (req, res) => {
     if (!productDetail) {
       return res.status(404).render("client/pages/errors/404");
     }
-
+    if (productDetail.productCategory_id) {
+      const category = await ProductCategory.findOne({
+        _id: productDetail.productCategory_id,
+        status: "active",
+        deleted: false,
+      });
+      productDetail.category = category;
+    }
     res.render("client/pages/product/detail", {
+      title: "Product",
       product: productDetail,
     });
   } catch (error) {
@@ -35,7 +43,7 @@ module.exports.detail = async (req, res) => {
     res.status(500).render("client/pages/errors/500");
   }
 };
-// [GET]/products/:slug
+// [GET]/products/:slugCategory
 module.exports.category = async (req, res) => {
   const category = await ProductCategory.findOne({
     slug: req.params.slugCategory,

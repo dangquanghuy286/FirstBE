@@ -13,7 +13,7 @@ mixin product-card-list(products)
                 i.fas.fa-image
             .card-body
               h5.card-title 
-                a(href=`/products/${product.slug}`)= product.title
+                a(href=`/products/detail/${product.slug}`)= product.title
               .card-text
                 p.mb-2
                   strong ID: 
