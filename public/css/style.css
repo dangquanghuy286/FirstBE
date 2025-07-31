@@ -181,3 +181,23 @@ header.header .container {
 .description-text {
   color: #555;
 }
+/* CARD */
+/* Featured label */
+.product-card .card-img-top {
+  position: relative;
+}
+
+.product-card .inner-featured {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #e74c3c;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  z-index: 1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+}

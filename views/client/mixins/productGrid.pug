@@ -1,0 +1,28 @@
+mixin product-card-list(products)
+  if products && products.length > 0
+    .product-grid
+      each product in products
+        .product-item
+          .card.h-100.product-card
+            if product.thumbnail
+              img.card-img-top(src=product.thumbnail, alt=product.title)
+              if(product.featured=="1")
+                .inner-featured Nổi bật
+            else
+              .card-img-top.no-thumbnail
+                i.fas.fa-image
+            .card-body
+              h5.card-title 
+                a(href=`/products/${product.slug}`)= product.title
+              .card-text
+                p.mb-2
+                  strong ID: 
+                  span.product-id= product._id
+                p.mb-2
+                  strong Price: 
+                  span.price-tag $#{product.price}
+                p.mb-0
+                  strong Description: 
+                  span.description-text !{product.description}
+  else
+    p.text-muted Không có sản phẩm nào để hiển thị.

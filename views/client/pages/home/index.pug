@@ -1,5 +1,9 @@
 extends ../../layouts/layoutDefault.pug
+include ../../mixins/productGrid.pug
 block content
-    h1 Welcome to the Home Page
-    p This is the home page content.
-    
+  h1 Welcome to the Home Page
+  p This is the home page content.
+
+  if featureProduct && featureProduct.length > 0
+    h2.mt-5.mb-3 Sản phẩm nổi bật
+    +product-card-list(featureProduct)

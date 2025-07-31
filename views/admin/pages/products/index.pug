@@ -87,23 +87,18 @@ block content
                         data-id=product.id
                         ) Delete
                   td
-                    if product.status === 'active'
+                    
+                    if role.permission.includes("products_edit")
                       a(
-                      href="javascript:;" 
-                      class="badge bg-success"
-                      button-change-status
-                      data-status =product.status
-                      data-id=product.id
-                      )  Active
-                    else if product.status === 'inactive'
-                      a(class="badge bg-secondary"
-                      href="javascript:;" 
-                      button-change-status
-                      data-status =product.status
-                      data-id=product.id
-                      ) Inactive
+                        href="javascript:;"
+                        class=product.status === 'active' ? "badge bg-success" : "badge bg-secondary"
+                        button-change-status
+                        data-status=product.status
+                        data-id=product.id
+                      )= product.status === 'active' ? 'Active' : (product.status === 'inactive' ? 'Inactive' : 'Unknown')
                     else
-                      span(class="badge bg-danger") Unknown Status
+                      span(class="badge bg-secondary") Không có quyền
+
                   td
                     if(product.createdBy && product.createdBy.account_id && product.createdBy.createAt)
                       p #{product.accFullname || 'Unknown User'} 

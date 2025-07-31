@@ -85,23 +85,29 @@ module.exports.index = async (req, res) => {
 };
 //[PATCH] /admin/product/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
-  const status = req.params.status;
-  const id = req.params.id;
-  const updatedBy = {
-    account_id: res.locals.user.id,
-    updatedAt: new Date(),
-  };
-  await Product.updateOne(
-    { _id: id },
-    {
-      status: status,
-      $push: {
-        updatedBy: updatedBy,
-      },
-    }
-  );
-  req.flash("success", "Cập nhật thành công!");
-  res.redirect(req.get("referer") || "/admin/products");
+  const permission = res.locals.role.permission;
+  if (permission.includes("products_edit")) {
+    const status = req.params.status;
+    const id = req.params.id;
+    const updatedBy = {
+      account_id: res.locals.user.id,
+      updatedAt: new Date(),
+    };
+    await Product.updateOne(
+      { _id: id },
+      {
+        status: status,
+        $push: {
+          updatedBy: updatedBy,
+        },
+      }
+    );
+    req.flash("success", "Cập nhật thành công!");
+    res.redirect(req.get("referer") || "/admin/products");
+  } else {
+    res.render("admin/partials/error404");
+    return;
+  }
 };
 //[PATCH] /admin/product/change-multi
 module.exports.changeMulti = async (req, res) => {
