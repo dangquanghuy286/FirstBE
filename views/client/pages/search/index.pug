@@ -1,0 +1,12 @@
+extends ../../layouts/layoutDefault.pug
+include ../../mixins/productGrid.pug
+block content 
+    if products && products.length > 0
+        .container.my-3 
+            .row 
+                .col-12
+                    h2.mt-5.mb-3 #{title}
+                    +product-card-list(products)
+    else
+        h3(class="text-center") Không tìm thấy
+        img(src="images/Logo2.png", alt="fail")

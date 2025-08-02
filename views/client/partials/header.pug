@@ -12,20 +12,17 @@ header.header
           a(href=pathProduct) Sản phẩm
           +sub-menu(records,pathProduct)
           
-          //- ul
-          //-   li
-          //-     a(href="/products/slug-1") Mục 1
-          //-     ul
-          //-       li
-          //-         a(href="/products/slug-1-1") Mục 1 - 1
-          //-       li
-          //-         a(href="/products/slug-1-2") Mục 1 - 2
-          //-         ul
-          //-           li
-          //-             a(href="/products/slug-1-2-1") Mục 1 - 2 - 1
-          //-           li
-          //-             a(href="/products/slug-1-2-2") Mục 1 - 2 - 2
-          //-   li
-          //-     a(href="/products/slug-2") Mục 2
+    .search 
+      form(action="/search"
+      method="GET")
+        div(class="form-group d-flex mb-0")
+          input(type="text"
+          placeholder="Nhập từ khóa"
+          class="form-control"
+          name="keyword"
+          value=keyword)
+          button(type="submit"
+          class="btn btn-primary"
+          ) Tìm 
     .auth
       a.btn(href="/login") Đăng nhập

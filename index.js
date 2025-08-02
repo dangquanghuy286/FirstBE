@@ -28,10 +28,9 @@ const route = require("./routes/client/index.route");
 
 // Thư viện giúp phân tích dữ liệu từ form (application/x-www-form-urlencoded)
 const bodyParser = require("body-parser");
-
+// Flash:
 // Thư viện hỗ trợ đọc cookie từ request
 const cookieParser = require("cookie-parser");
-
 // Thư viện hỗ trợ phiên làm việc (session) để lưu dữ liệu người dùng
 const session = require("express-session");
 
@@ -52,7 +51,7 @@ app.use(bodyParser.urlencoded());
 
 // Biến toàn cục dùng trong view engine (Pug) – ví dụ dùng để hiển thị đường dẫn prefix admin
 app.locals.prefixAdmin = systemconfig.prefixAdmin;
-// Biến toàn cục dùng trong view engine (Pug) – ví dụ dùng để hiển thị đường dẫn prefix admin
+// Biến toàn cục dùng trong view engine
 app.locals.moment = moment;
 
 // Cấu hình thư mục views và view engine là pug
