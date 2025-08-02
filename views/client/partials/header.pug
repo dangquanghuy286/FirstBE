@@ -8,21 +8,18 @@ header.header
       ul.menu
         li: a(href="/") Trang chủ
         li
-          -const pathProduct="/products"
+          - const pathProduct="/products"
           a(href=pathProduct) Sản phẩm
-          +sub-menu(records,pathProduct)
-          
+          +sub-menu(records, pathProduct)
+
     .search 
-      form(action="/search"
-      method="GET")
-        div(class="form-group d-flex mb-0")
-          input(type="text"
-          placeholder="Nhập từ khóa"
-          class="form-control"
-          name="keyword"
-          value=keyword)
-          button(type="submit"
-          class="btn btn-primary"
-          ) Tìm 
-    .auth
+      form(action="/search", method="GET")
+        .form-group.d-flex.mb-0
+          input.form-control(type="text", placeholder="Nhập từ khóa", name="keyword", value=keyword)
+          button.btn.btn-primary(type="submit") Tìm
+
+    .auth.d-flex.align-items-center.gap-2
       a.btn(href="/login") Đăng nhập
+      a(href="/cart", class="btn btn-outline-secondary position-relative")
+        i.fas.fa-shopping-cart
+        span.badge.bg-danger.text-white.position-absolute.top-0.start-100.translate-middle.rounded-circle(style="font-size: 0.7rem") #{miniCart && miniCart.totalQuantity ? miniCart.totalQuantity : 0}
