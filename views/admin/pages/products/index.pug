@@ -5,132 +5,134 @@ include ../../mixins/pagination.pug
 include ../../mixins/formChangeMulti.pug
 include ../../mixins/alert.pug
 include ../../mixins/sort.pug
-block content
-  
-  if(role.permission.includes("products_view"))
-    +alert-success("5000")
-    h1= title
-    .card.mb-3 
-      .card-header Bộ lọc sản phẩm
-      .card-body
-        .row 
-          .col-6
-            +filter-status(filterStatus)
-          .col-6
-            +search(keyword)
-    if products.length > 0
-      .card
-        .card-header Danh sách sản phẩm
-        .card-body
-          .row
-            .col-4 
-              +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
-            .col-4 
-              +sortBox
-            .col-4 
-              if(role.permission.includes("products_create"))
-                a(href=`${prefixAdmin}/products/create`
-                class="btn btn-outline-success") +Thêm mới 
-        
-              
 
-          table(
-            class="table table-hover table-sm"
-            checkbox-multi
-          )
-            thead
+block content
+  if role.permission.includes("products_view")
+    +alert-success("5000")
+    h1.text-primary.mb-4= title
+
+    .card.mb-4.shadow
+      .card-header.bg-light.font-weight-bold Bộ lọc sản phẩm
+      .card-body
+        .row.align-items-end
+          .col-md-6
+            +filter-status(filterStatus)
+          .col-md-6
+            +search(keyword)
+
+    if products.length > 0
+      .card.shadow-sm
+        .card-header.bg-light.font-weight-bold.d-flex.justify-content-between.align-items-center
+          span Danh sách sản phẩm
+          if role.permission.includes("products_create")
+            a(href=`${prefixAdmin}/products/create`, class="btn btn-success btn-sm") 
+              i.fas.fa-plus-circle.me-1
+              | Thêm mới
+
+        .card-body
+          .row.mb-3
+            .col-md-4
+              +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
+            .col-md-4
+              +sortBox
+
+          table.table.table-hover.table-bordered.align-middle.text-center.table-sm
+            thead.table-light
               tr
                 th 
-                  input(type="checkbox" name="checkall")
+                  input(type="checkbox", name="checkall")
                 th #
-                th Name
-                th Price
-                th Description
-                th Image
-                th Position
-                th Actions
-                th Status
-                th Create By
-                th Update By
+                th Tên sản phẩm
+                th Giá
+                th Mô tả
+                th Ảnh
+                th Vị trí
+                th Hành động
+                th Trạng thái
+                th Tạo bởi
+                th Cập nhật bởi
             tbody
               each product, index in products
                 tr
                   td 
-                    input(type="checkbox"
-                    name="id"
-                    value=product.id)
+                    input(type="checkbox", name="id", value=product.id)
                   td= index + 1
-                  td= product.title
-                  td= product.price
-                  td!= product.description
+                  td.text-start= product.title
+                  td.text-nowrap.text-success= product.price
+                  td.text-start!= product.description
                   td
-                    img(src=product.thumbnail, alt=product.title, style="width: 100px; height: auto;")
-                  td 
-                    input(
-                      type="number"
-                      value=product.position
-                      style="width:60px"
-                      min="1"
-                      name="position")
-                      
+                    img(src=product.thumbnail, alt=product.title, style="width: 80px; height: auto;", class="img-thumbnail")
                   td
-                    if(role.permission.includes("products_view"))
-                      a(href=`${prefixAdmin}/products/detail/${product.id}`
-                        class="btn btn-secondary btn-sm me-1") View
-                    if(role.permission.includes("products_edit"))
-                      a(href=`${prefixAdmin}/products/edit/${product.id}`
-                        class="btn btn-warning btn-sm me-1") Edit
-                    if(role.permission.includes("products_delete"))
-                      button(
-                        class="btn btn-danger btn-sm"
-                        button-Delete
+                    input.form-control.form-control-sm(
+                      type="number", 
+                      value=product.position, 
+                      style="width: 70px; margin: auto", 
+                      min="1", 
+                      name="position"
+                    )
+                  td
+                    if role.permission.includes("products_view")
+                      a.btn.btn-outline-secondary.btn-sm.me-1(
+                        href=`${prefixAdmin}/products/detail/${product.id}`
+                      ) 
+                        i.fas.fa-eye
+                        |  Xem
+                    if role.permission.includes("products_edit")
+                      a.btn.btn-outline-warning.btn-sm.me-1(
+                        href=`${prefixAdmin}/products/edit/${product.id}`
+                      ) 
+                        i.fas.fa-edit
+                        |  Sửa
+                    if role.permission.includes("products_delete")
+                      button.btn.btn-outline-danger.btn-sm(
+                        button-Delete,
                         data-id=product.id
-                        ) Delete
+                      ) 
+                        i.fas.fa-trash
+                        |  Xóa
                   td
-                    
                     if role.permission.includes("products_edit")
                       a(
-                        href="javascript:;"
-                        class=product.status === 'active' ? "badge bg-success" : "badge bg-secondary"
-                        button-change-status
-                        data-status=product.status
+                        href="javascript:;",
+                        class=product.status === 'active' ? "badge bg-success" : "badge bg-secondary",
+                        button-change-status,
+                        data-status=product.status,
                         data-id=product.id
-                      )= product.status === 'active' ? 'Active' : (product.status === 'inactive' ? 'Inactive' : 'Unknown')
+                      )= product.status === 'active' ? 'Đang hoạt động' : 'Không hoạt động'
                     else
-                      span(class="badge bg-secondary") Không có quyền
-
-                  td
-                    if(product.createdBy && product.createdBy.account_id && product.createdBy.createAt)
-                      p #{product.accFullname || 'Unknown User'} 
-                      p Tạo: #{moment(product.createdBy.createAt).calendar()} (#{moment(product.createdBy.createAt).fromNow()})
+                      span.badge.bg-secondary Không có quyền
+                  td.text-start
+                    if product.createdBy && product.createdBy.account_id && product.createdBy.createAt
+                      p.mb-0.fw-bold= product.accFullname || 'Người dùng không xác định'
+                      small.text-muted
+                        | Tạo: #{moment(product.createdBy.createAt).calendar()} 
+                        | (#{moment(product.createdBy.createAt).fromNow()})
                     else
-                      p Không có thông tin
-                  td
+                      small.text-muted Không có thông tin
+                  td.text-start
                     - const lastUpdated = product.updatedBy && product.updatedBy.length > 0 ? product.updatedBy[product.updatedBy.length - 1] : null
                     if lastUpdated && lastUpdated.account_id && lastUpdated.updatedAt
-                      p 
-                        b #{product.accountFullName || 'Unknown User'} 
-                      p 
-                        i Cập nhật: #{moment(lastUpdated.updatedAt).calendar()} (#{moment(lastUpdated.updatedAt).fromNow()})
+                      p.mb-0.fw-bold= product.accountFullName || 'Người dùng không xác định'
+                      small.text-muted
+                        | Cập nhật: #{moment(lastUpdated.updatedAt).calendar()} 
+                        | (#{moment(lastUpdated.updatedAt).fromNow()})
                     else
-                      p Không có thông tin
-
+                      small.text-muted Không có thông tin
     else
-      p No products available.
+      .alert.alert-info.text-center.mt-4 Không có sản phẩm nào.
+
     +pagination(pagination)
 
-    form(
-    action="" 
-    method="POST"
-    id="form-change-status"
-    data-path=`${prefixAdmin}/products/change-status`
-    ) 
+    form#form-change-status(
+      action="", 
+      method="POST",
+      data-path=`${prefixAdmin}/products/change-status`
+    )
 
-    form(
-    action="" 
-    method="POST"
-    id="form-delete-item"
-    data-path=`${prefixAdmin}/products/deleteItem`
-    ) 
+    form#form-delete-item(
+      action="", 
+      method="POST",
+      data-path=`${prefixAdmin}/products/deleteItem`
+    )
 
     script(src="/admin/js/product.js")
