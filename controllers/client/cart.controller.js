@@ -1,4 +1,37 @@
 const Carts = require("../../models/card.model");
+const Product = require("../../models/product.model");
+// [GET] cart/
+module.exports.index = async (req, res) => {
+  const cartId = req.cookies.cartId;
+  const cart = await Carts.findOne({
+    _id: cartId,
+  });
+
+  let totalPrice = 0;
+
+  if (cart && cart.product.length > 0) {
+    for (const item of cart.product) {
+      const productId = item.product_id;
+      const productInfo = await Product.findOne({
+        _id: productId,
+      }).select("title thumbnail slug price");
+
+      // Gắn thông tin sản phẩm vào item
+      item.productInfo = productInfo;
+
+      // Tính tổng tiền
+      if (productInfo) {
+        totalPrice += productInfo.price * item.quantity;
+      }
+    }
+  }
+
+  res.render("client/pages/cart/index", {
+    title: "Cart",
+    cartItems: cart,
+    totalPrice: totalPrice,
+  });
+};
 
 //[POST] cart/add/:productId
 module.exports.addPost = async (req, res) => {
