@@ -39,7 +39,7 @@ block content
                 value=item.quantity, 
                 min="1", 
                 style="width: 60px; display:inline-block;", 
-                item-id=item.product_id
+                product-id=item.product_id
               )
             td
               = item.productInfo ? item.productInfo.price.toLocaleString() + ' đ' : '0 đ'
@@ -66,3 +66,4 @@ block content
       h3 Giỏ hàng trống!
       p.text-muted Bạn chưa có sản phẩm nào trong giỏ hàng
       a.btn.btn-primary(href="/products") Tiếp tục mua sắm
+  script(src="/js/cart.js")

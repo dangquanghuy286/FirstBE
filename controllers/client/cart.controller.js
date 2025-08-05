@@ -91,3 +91,22 @@ module.exports.delete = async (req, res) => {
   req.flash("success", "Xóa thành công!");
   res.redirect(req.get("referer"));
 };
+// [GET] /cart/update/:productId/:quantity
+module.exports.update = async (req, res) => {
+  const cartId = req.cookies.cartId;
+  const productId = req.params.productId;
+  const quantity = req.params.quantity;
+  await Carts.updateOne(
+    {
+      _id: cartId,
+      "product.product_id": productId,
+    },
+    {
+      $set: {
+        "product.$.quantity": quantity,
+      },
+    }
+  );
+  req.flash("success", "Xóa thành công!");
+  res.redirect(req.get("referer"));
+};
