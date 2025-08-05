@@ -1,0 +1,222 @@
+extends ../../layouts/layoutDefault.pug
+include ../../mixins/alert.pug
+
+block content
+  .container.mt-4
+    .row
+      .col-md-8
+        h2.mb-4 Thông tin thanh toán
+        
+        // Thông tin khách hàng
+        .card.mb-4
+          .card-header
+            h5.mb-0
+              i.fas.fa-user.me-2
+              | Thông tin khách hàng
+          .card-body
+            form#checkout-form(action="/checkout/order" method="post")
+              .row
+                .col-md-6.mb-3
+                  label.form-label(for="fullName") Họ và tên *
+                  input.form-control(
+                    type="text", 
+                    id="fullName", 
+                    name="fullName", 
+                    required
+                  )
+                .col-md-6.mb-3
+                  label.form-label(for="phone") Số điện thoại *
+                  input.form-control(
+                    type="tel", 
+                    id="phone", 
+                    name="phone", 
+                    required
+                  )
+              .mb-3
+                label.form-label(for="email") Email
+                input.form-control(
+                  type="email", 
+                  id="email", 
+                  name="email"
+                )
+              .mb-3
+                label.form-label(for="address") Địa chỉ *
+                textarea.form-control(
+                  id="address", 
+                  name="address", 
+                  rows="3", 
+                  required
+                )
+
+              // Phương thức vận chuyển
+              .mb-4
+                h6.mb-3
+                  i.fas.fa-truck.me-2
+                  | Phương thức vận chuyển
+                .form-check.mb-3
+                  input.form-check-input(
+                    type="radio", 
+                    name="shipping", 
+                    id="standard", 
+                    value="standard", 
+                    checked
+                  )
+                  label.form-check-label(for="standard")
+                    .d-flex.justify-content-between.w-100
+                      span Giao hàng tiêu chuẩn (3-5 ngày)
+                      strong 30,000 đ
+                .form-check.mb-3
+                  input.form-check-input(
+                    type="radio", 
+                    name="shipping", 
+                    id="express", 
+                    value="express"
+                  )
+                  label.form-check-label(for="express")
+                    .d-flex.justify-content-between.w-100
+                      span Giao hàng nhanh (1-2 ngày)
+                      strong 50,000 đ
+                .form-check
+                  input.form-check-input(
+                    type="radio", 
+                    name="shipping", 
+                    id="same-day", 
+                    value="same-day"
+                  )
+                  label.form-check-label(for="same-day")
+                    .d-flex.justify-content-between.w-100
+                      span Giao hàng trong ngày (chỉ nội thành)
+                      strong 80,000 đ
+
+              // Phương thức thanh toán
+              .mb-4
+                h6.mb-3
+                  i.fas.fa-credit-card.me-2
+                  | Phương thức thanh toán
+                .form-check.mb-3
+                  input.form-check-input(
+                    type="radio", 
+                    name="payment", 
+                    id="cod", 
+                    value="cod", 
+                    checked
+                  )
+                  label.form-check-label(for="cod")
+                    i.fas.fa-money-bill-wave.me-2
+                    | Thanh toán khi nhận hàng (COD)
+                .form-check.mb-3
+                  input.form-check-input(
+                    type="radio", 
+                    name="payment", 
+                    id="bank-transfer", 
+                    value="bank-transfer"
+                  )
+                  label.form-check-label(for="bank-transfer")
+                    i.fas.fa-university.me-2
+                    | Chuyển khoản ngân hàng
+                .form-check.mb-3
+                  input.form-check-input(
+                    type="radio", 
+                    name="payment", 
+                    id="momo", 
+                    value="momo"
+                  )
+                  label.form-check-label(for="momo")
+                    i.fab.fa-cc-paypal.me-2
+                    | Ví MoMo
+                .form-check
+                  input.form-check-input(
+                    type="radio", 
+                    name="payment", 
+                    id="vnpay", 
+                    value="vnpay"
+                  )
+                  label.form-check-label(for="vnpay")
+                    i.fas.fa-credit-card.me-2
+                    | VNPay
+
+              // Ghi chú
+              .mb-4
+                label.form-label(for="note") Ghi chú đơn hàng
+                textarea.form-control(
+                  id="note",
+                  name="note", 
+                  rows="3", 
+                  placeholder="Ghi chú thêm cho đơn hàng (tùy chọn)"
+                )
+
+      .col-md-4
+        // Tóm tắt đơn hàng
+        .card.sticky-top(style="top: 30px;")
+          .card-header
+            h5.mb-0
+              i.fas.fa-receipt.me-2
+              | Tóm tắt đơn hàng
+          .card-body
+            if cartItems && cartItems.product && cartItems.product.length > 0
+              // Danh sách sản phẩm
+              each item in cartItems.product
+                .d-flex.mb-3.pb-3.border-bottom
+                  if item.productInfo && item.productInfo.thumbnail
+                    img.me-3(
+                      src=item.productInfo.thumbnail, 
+                      alt=item.productInfo.title, 
+                      style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;"
+                    )
+                  .flex-grow-1
+                    if item.productInfo
+                      h6.mb-1= item.productInfo.title
+                      .text-muted.small Số lượng: #{item.quantity}
+                      .fw-bold.text-primary
+                        = (item.productInfo.price * item.quantity).toLocaleString('vi-VN') + ' đ'
+
+              hr
+
+              // Tính toán chi phí
+              .d-flex.justify-content-between.mb-2
+                span Tạm tính:
+                strong #{totalPrice.toLocaleString('vi-VN')} đ
+
+              - var firstItemWithDiscount = cartItems.product.find(item => item.productInfo && item.productInfo.discountPercentage)
+              if firstItemWithDiscount && firstItemWithDiscount.productInfo.discountPercentage > 0
+                .d-flex.justify-content-between.mb-2.text-success
+                  span Giảm giá (#{firstItemWithDiscount.productInfo.discountPercentage}%):
+                  strong -#{Math.round(totalPrice * firstItemWithDiscount.productInfo.discountPercentage / 100).toLocaleString('vi-VN')} đ
+
+              .d-flex.justify-content-between.mb-2
+                span Phí vận chuyển:
+                strong#shipping-fee 30,000 đ
+
+              hr
+
+              .d-flex.justify-content-between.mb-3
+                h5 Tổng cộng:
+                h5.text-primary#total-amount
+                  strong #{(totalPrice + 30000).toLocaleString('vi-VN')} đ
+
+              // Mã giảm giá
+              .mb-3
+                label.form-label Mã giảm giá
+                .input-group
+                  input.form-control(
+                    type="text", 
+                    placeholder="Nhập mã giảm giá", 
+                    id="coupon-code"
+                  )
+                  button.btn.btn-outline-primary(type="button", id="apply-coupon") Áp dụng
+
+              // Nút đặt hàng
+              button.btn.btn-success.btn-lg.w-100.mb-3(type="submit", form="checkout-form")
+                i.fas.fa-shopping-cart.me-2
+                | Đặt hàng
+
+              .text-center
+                a.btn.btn-outline-secondary(href="/cart")
+                  i.fas.fa-arrow-left.me-2
+                  | Quay lại giỏ hàng
+
+            else
+              .text-center
+                h5 Giỏ hàng trống!
+                p.text-muted Bạn chưa có sản phẩm nào trong giỏ hàng
+                a.btn.btn-primary(href="/products") Tiếp tục mua sắm
