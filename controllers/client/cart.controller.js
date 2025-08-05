@@ -14,14 +14,16 @@ module.exports.index = async (req, res) => {
       const productId = item.product_id;
       const productInfo = await Product.findOne({
         _id: productId,
-      }).select("title thumbnail slug price");
+      }).select("title thumbnail slug price discountPercentage");
 
       // Gắn thông tin sản phẩm vào item
       item.productInfo = productInfo;
 
       // Tính tổng tiền
-      if (productInfo) {
-        totalPrice += productInfo.price * item.quantity;
+      if (productInfo && productInfo.discountPercentage) {
+        const discountedPrice =
+          productInfo.price * (1 - productInfo.discountPercentage / 100);
+        totalPrice += Math.round(discountedPrice * item.quantity);
       }
     }
   }
@@ -73,4 +75,19 @@ module.exports.addPost = async (req, res) => {
 
   req.flash("success", "Thêm sản phẩm thành công!");
   res.redirect(req.get("referer") || "/");
+};
+// [GET] /cart/delete/:productId
+module.exports.delete = async (req, res) => {
+  const cartId = req.cookies.cartId;
+  const productId = req.params.productId;
+  await Carts.updateOne(
+    {
+      _id: cartId,
+    },
+    {
+      $pull: { product: { product_id: productId } },
+    }
+  );
+  req.flash("success", "Xóa thành công!");
+  res.redirect(req.get("referer"));
 };

@@ -1,8 +1,8 @@
 extends ../../layouts/layoutDefault.pug
-
+include ../../mixins/alert.pug
 block content
   h2.mt-5.mb-4 Giỏ hàng của bạn
-
+  +alert-success("5000")
   if cartItems && cartItems.product && cartItems.product.length > 0
     table.table.table-hover
       thead
@@ -18,31 +18,49 @@ block content
           tr
             td
               if item.productInfo && item.productInfo.thumbnail
-                img(src=item.productInfo.thumbnail, alt=item.productInfo.title, style="width: 80px")
+                img(
+                  src=item.productInfo.thumbnail, 
+                  alt=item.productInfo.title, 
+                  style="width: 80px"
+                )
               else
                 | Không có ảnh
-            td= item.productInfo ? item.productInfo.title : 'Sản phẩm không tồn tại'
             td
-              form(action=`/cart/update/${item._id}`, method="POST", style="display:inline-block;")
-                input.form-control.form-control-sm(
-                  type="number", 
-                  name="quantity", 
-                  value=item.quantity, 
-                  min="1", 
-                  style="width: 60px; display:inline-block;"
-                  item-id=""
-                )
-               
-            td= item.productInfo ? item.productInfo.price.toLocaleString() + ' đ' : '0 đ'
-            td= item.productInfo ? (item.productInfo.price * item.quantity).toLocaleString() + ' đ' : '0 đ'
+              if item.productInfo
+                a(href=`/products/detail/${item.productInfo.slug}`, style="text-decoration: none; font-weight: bold; color: inherit;")
+                  = item.productInfo.title
+              else
+                | Sản phẩm không tồn tại
+
             td
-              a.btn.btn-sm.btn-danger(href=`/cart/remove/${item._id}`) Xóa
+              input.form-control.form-control-sm(
+                type="number", 
+                name="quantity", 
+                value=item.quantity, 
+                min="1", 
+                style="width: 60px; display:inline-block;", 
+                item-id=item.product_id
+              )
+            td
+              = item.productInfo ? item.productInfo.price.toLocaleString() + ' đ' : '0 đ'
+            td
+              = item.productInfo ? (item.productInfo.price * item.quantity).toLocaleString() + ' đ' : '0 đ'
+            td
+              a.btn.btn-sm.btn-danger(href=`/cart/remove/${item.product_id}`) Xóa
 
     .text-end.mt-4
-      h4 Tổng tiền: 
-        strong #{totalPrice.toLocaleString()} đ
+ 
+      - var firstItemWithDiscount = cartItems.product.find(item => item.productInfo && item.productInfo.discountPercentage)
+  
+      if firstItemWithDiscount && firstItemWithDiscount.productInfo.discountPercentage > 0
+        h5.text-success
+          | Giảm giá: 
+          span.fw-bold #{firstItemWithDiscount.productInfo.discountPercentage}%
 
-      a.btn.btn-success.mt-2(href="/checkout") Tiến hành thanh toán
+      h4.mb-3
+        | Tổng tiền: 
+        strong.text-primary #{totalPrice.toLocaleString('vi-VN')} đ
+      a.btn.btn-success.btn-lg(href="/checkout") Thanh toán
   else
     .text-center.mt-5
       h3 Giỏ hàng trống!
