@@ -7,7 +7,10 @@ header.header {
   background-color: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 10px 30px;
-  font-family: Arial, sans-serif;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 header.header .container {
@@ -52,7 +55,7 @@ header.header .container {
 
 .auth .btn {
   padding: 6px 14px;
-  background-color: #007bff;
+
   color: white;
   border-radius: 4px;
   text-decoration: none;

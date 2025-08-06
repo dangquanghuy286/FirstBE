@@ -32,3 +32,48 @@ module.exports.registerPost = async (req, res) => {
   res.redirect("/user/login");
   console.log(user);
 };
+// [POST] /user/login
+module.exports.loginPost = async (req, res) => {
+  try {
+    const user = req.body.userName;
+    const password = req.body.password;
+
+    // Tìm user theo userName
+    const userLogin = await User.findOne({
+      userName: user,
+      deleted: false,
+    });
+
+    // Nếu không tìm thấy user
+    if (!userLogin) {
+      req.flash("error", "Tên đăng nhập không đúng");
+      res.redirect(req.get("referer"));
+      return;
+    }
+
+    // Kiểm tra mật khẩu
+    if (md5(password) !== userLogin.password) {
+      req.flash("error", "Mật khẩu không đúng");
+      res.redirect(req.get("referer"));
+      return;
+    }
+
+    if (userLogin.status !== "active") {
+      req.flash("error", "Tài khoản của bạn đã bị khóa");
+      res.redirect(req.get("referer"));
+      return;
+    }
+
+    res.cookie("tokenUser", userLogin.tokenUser, {
+      maxAge: 900000, // 15 phút
+      httpOnly: true,
+    });
+
+    req.flash("success", "Đăng nhập thành công");
+    res.redirect("/");
+  } catch (error) {
+    console.error("Login error:", error);
+    req.flash("error", "Có lỗi xảy ra trong quá trình đăng nhập");
+    res.redirect(req.get("referer"));
+  }
+};

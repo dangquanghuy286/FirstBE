@@ -2,25 +2,26 @@ extends ../../layouts/layoutDefault.pug
 include ../../mixins/alert.pug
 
 block content
+  +alert-success("5000")
+  +alert-error("5000")
   .container.min-vh-100.d-flex.align-items-center.justify-content-center.py-4
     .card.w-100.bg-white.border.border-secondary.rounded-3.p-4.shadow-sm(style="max-width: 400px;")
       h2.text-center.mb-4.text-primary.fs-2.fw-bold Đăng Nhập
 
-      form(method="POST" action="/login")
+      form(method="POST" action="/user/login")
         //- Tên đăng nhập
         .mb-3.position-relative
-          label.d-none(for="user_name") Tên Đăng Nhập
+          label.d-none(for="userName") Tên Đăng Nhập
           .input-group
             span.input-group-text
               i.fas.fa-user.text-primary
-            input#user_name.form-control.form-control-lg(
+            input#userName.form-control.form-control-lg(
               type="text"
-              name="user_name"
+              name="userName"
               placeholder="Tên Đăng Nhập"
               aria-label="Tên Đăng Nhập"
             )
-          if error_user_name
-            p.text-danger.small.mt-1 #{error_user_name}
+          
 
         //- Mật khẩu
         .mb-3.position-relative
@@ -34,8 +35,7 @@ block content
               placeholder="Mật khẩu"
               aria-label="Mật khẩu"
             )
-          if error_password
-            p.text-danger.small.mt-1 #{error_password}
+          
 
         //- Ghi nhớ & Quên mật khẩu
         .d-flex.align-items-center.justify-content-between.mb-3
