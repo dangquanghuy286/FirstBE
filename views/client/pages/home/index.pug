@@ -1,9 +1,6 @@
 extends ../../layouts/layoutDefault.pug
 include ../../mixins/productGrid.pug
-include ../../mixins/alert.pug
 block content
-  +alert-success("5000")
-
   if featureProduct && featureProduct.length > 0
     h2.mt-5.mb-3 Sản phẩm nổi bật
     +product-card-list(featureProduct)

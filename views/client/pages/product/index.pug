@@ -4,4 +4,7 @@ block content
   if products && products.length > 0
     h2.mt-5.mb-3 #{title}
     +product-card-list(products)
+  else
+    p Không có sản phẩm nào.
+
 

@@ -17,17 +17,14 @@ header.header
         .form-group.d-flex.mb-0
           input.form-control(type="text", placeholder="Nhập từ khóa", name="keyword", value=keyword)
           button.btn.btn-primary(type="submit") Tìm
-  
+
     if(user)
       .auth.d-flex.align-items-center.gap-2
-        a.btn.btn-primary(href="/user/profile") #{user.userName}
-        a(href="/cart", class="btn btn-primary position-relative")
+        a(href="/user/profile" class="btn btn-primary") #{user.userName}
+        a(href="/cart", class="btn btn-outline-secondary position-relative")
           i.fas.fa-shopping-cart
           span.badge.bg-danger.text-white.position-absolute.top-0.start-100.translate-middle.rounded-circle(style="font-size: 0.7rem") #{miniCart && miniCart.totalQuantity ? miniCart.totalQuantity : 0}
         a.btn.btn-danger(href="/user/logout") Đăng xuất
     else
       .auth.d-flex.align-items-center.gap-2
-        a.btn(href="/user/login") Đăng nhập
-        a(href="/cart", class="btn btn-outline-secondary position-relative")
-          i.fas.fa-shopping-cart
-          span.badge.bg-danger.text-white.position-absolute.top-0.start-100.translate-middle.rounded-circle(style="font-size: 0.7rem") #{miniCart && miniCart.totalQuantity ? miniCart.totalQuantity : 0}
+        a.btn.btn-primary(href="/user/login") Đăng nhập

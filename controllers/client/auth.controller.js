@@ -1,6 +1,13 @@
 const md5 = require("md5");
 const User = require("../../models/user.model");
 
+// [GET]  /user/logout
+module.exports.logout = (req, res) => {
+  res.clearCookie("tokenUser");
+  req.flash("success", "Đăng xuất thành công");
+  res.redirect("/user/login");
+};
+
 // [GET]  /user/login
 module.exports.login = (req, res) => {
   res.render("client/pages/auth/login", {
