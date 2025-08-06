@@ -99,5 +99,27 @@ module.exports.order = async (req, res) => {
   );
 
   req.flash("success", "Thanh toán thành công!");
-  res.redirect("/cart");
+  res.redirect(`/checkout/success/${order._id}`);
+};
+// [GET] checkout/success/:id
+module.exports.success = async (req, res) => {
+  const orderId = req.params.id;
+  const order = await Orders.findOne({
+    _id: orderId,
+  });
+  if (!order) {
+    req.flash("error", "Đơn hàng không tồn tại!");
+    return res.redirect("/checkout");
+  }
+  for (const product of order.products) {
+    product.productInfo = await Product.findOne({
+      _id: product.product_id,
+    }).select("title thumbnail slug price discountPercentage");
+  }
+
+  res.render("client/pages/checkout/success", {
+    title: "Success",
+    order: order,
+  });
+  console.log("Order details:", order);
 };

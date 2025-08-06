@@ -1,0 +1,86 @@
+extends ../../layouts/layoutDefault.pug
+include ../../mixins/alert.pug
+
+block content
+  .container.mt-5.mb-5
+    .row.justify-content-center
+      .col-md-8
+        .card.border-success
+          .card-header.bg-success.text-white
+            h4.mb-0
+              i.fas.fa-check-circle.me-2
+              | Thanh toán thành công!
+          .card-body.text-center
+            i.fas.fa-thumbs-up.text-success(display="block" style="font-size: 60px;")
+            h5.mt-4 Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi!
+            p.text-muted.mb-4 Chúng tôi đã nhận được đơn hàng của bạn và sẽ xử lý trong thời gian sớm nhất.
+
+            // Tóm tắt đơn hàng
+            if order
+              - const paymentMethods = { cod: "Thanh toán khi nhận hàng (COD)", "bank-transfer": "Chuyển khoản ngân hàng", momo: "Ví điện tử MoMo", vnpay: "Cổng thanh toán VNPay" }
+              - const shippingMethods = { standard: "Giao hàng tiêu chuẩn (3-5 ngày)", express: "Giao hàng nhanh (1-2 ngày)", "same-day": "Giao hàng trong ngày" }
+
+              .text-start.mt-4
+                h5 Thông tin đơn hàng:
+                ul.list-group.list-group-flush
+                  li.list-group-item
+                    strong Mã đơn hàng: 
+                    |  #{order._id}
+                  li.list-group-item
+                    strong Họ tên: 
+                    |  #{order.userInfo.fullName}
+                  li.list-group-item
+                    strong Số điện thoại: 
+                    |  #{order.userInfo.phone}
+                  li.list-group-item
+                    strong Địa chỉ giao hàng: 
+                    |  #{order.userInfo.address}
+                  li.list-group-item
+                    strong Phương thức thanh toán: 
+                    span.badge.bg-info.text-dark.ms-2 #{paymentMethods[order.paymentMethod] || order.paymentMethod}
+                  li.list-group-item
+                    strong Phương thức vận chuyển: 
+                    span.badge.bg-warning.text-dark.ms-2 #{shippingMethods[order.shippingMethod] || order.shippingMethod}
+                  li.list-group-item
+                    strong Tổng thanh toán: 
+                    span.text-primary.fw-bold #{order.totalPrice.toLocaleString('vi-VN')} đ
+
+            // Thông tin sản phẩm đã đặt
+            if order && order.products.length > 0
+              .card.mt-4
+                .card-header.bg-light
+                  h5.mb-0
+                    i.fas.fa-box-open.me-2
+                    | Sản phẩm đã đặt
+                .card-body.p-0
+                  table.table.table-bordered.mb-0
+                    thead
+                      tr
+                        th STT
+                        th Ảnh
+                        th Tên
+                        th Giá
+                        th Số lượng
+                        th Tổng tiền
+                    tbody
+                      each item, index in order.products
+                        tr
+                          td #{index + 1}
+                          td
+                            img(src=item.productInfo.thumbnail, alt=item.productInfo.title, width="80px")
+                          td #{item.productInfo.title}
+                          td #{item.productInfo.price.toLocaleString('vi-VN')} đ
+                          td #{item.quantity}
+                          if order
+                            td #{order.totalPrice.toLocaleString('vi-VN')} đ
+                          else
+                            td 0 đ
+
+            // Nút hành động
+            .d-flex.justify-content-center.mt-4
+              a.btn.btn-primary.me-3(href="/") 
+                i.fas.fa-home.me-1
+                | Về trang chủ
+              a.btn.btn-outline-success(href="/orders") 
+                i.fas.fa-box.me-1
+                | Xem đơn hàng của bạn
