@@ -19,7 +19,7 @@ header.header
           button.btn.btn-primary(type="submit") Tìm
 
     .auth.d-flex.align-items-center.gap-2
-      a.btn(href="/login") Đăng nhập
+      a.btn(href="/user/login") Đăng nhập
       a(href="/cart", class="btn btn-outline-secondary position-relative")
         i.fas.fa-shopping-cart
         span.badge.bg-danger.text-white.position-absolute.top-0.start-100.translate-middle.rounded-circle(style="font-size: 0.7rem") #{miniCart && miniCart.totalQuantity ? miniCart.totalQuantity : 0}

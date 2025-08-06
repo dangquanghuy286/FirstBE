@@ -1,0 +1,67 @@
+extends ../../layouts/layoutDefault.pug
+include ../../mixins/alert.pug
+block content
+  .container.min-vh-100.d-flex.align-items-center.justify-content-center.py-4
+    .card.w-100.bg-white.border.border-secondary.rounded-3.p-4.shadow-sm(style="max-width: 400px;")
+      h2.text-center.mb-4.text-primary.fs-2.fw-bold Đăng Ký
+
+      form(method="POST" action="/user/register")
+        //- Tên đăng nhập
+        .mb-3.position-relative
+          label.d-none(for="userName") Tên Đăng Nhập
+          .input-group
+            span.input-group-text
+              i.fas.fa-user.text-primary
+            input#userName.form-control.form-control-lg(
+              type="text"
+              name="userName"
+              placeholder="Tên Đăng Nhập"
+              aria-label="Tên Đăng Nhập"
+            )
+          
+
+        //- Email
+        .mb-3.position-relative
+          label.d-none(for="email") Email
+          .input-group
+            span.input-group-text
+              i.fas.fa-envelope.text-primary
+            input#email.form-control.form-control-lg(
+              type="email"
+              name="email"
+              placeholder="Email"
+              aria-label="Email"
+            )
+         
+
+        //- Mật khẩu
+        .mb-3.position-relative
+          label.d-none(for="password") Mật khẩu
+          .input-group
+            span.input-group-text
+              i.fas.fa-lock.text-primary
+            input#password.form-control.form-control-lg(
+              type="password"
+              name="password"
+              placeholder="Mật khẩu"
+              aria-label="Mật khẩu"
+            )
+         
+
+        
+
+        //- Submit
+        button.btn.btn-primary.w-100.py-2.fw-semibold(type="submit") Đăng Ký
+
+      .d-flex.align-items-center.justify-content-center.my-3.text-primary
+        span — hoặc —
+
+      a.btn.btn-outline-primary.w-100.py-2.fw-semibold.d-flex.align-items-center.justify-content-center.gap-2.text-decoration-none(
+        href="http://localhost:8088/oauth2/authorization/google"
+      )
+        i.fab.fa-google.fs-5
+        | Đăng ký bằng Google
+
+      p.text-center.text-primary.mt-3
+        | Đã có tài khoản? 
+        a(href="/user/login" class="fw-bold text-info text-decoration-none hover:text-decoration-underline") Đăng nhập

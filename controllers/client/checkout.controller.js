@@ -121,5 +121,4 @@ module.exports.success = async (req, res) => {
     title: "Success",
     order: order,
   });
-  console.log("Order details:", order);
 };

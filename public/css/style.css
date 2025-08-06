@@ -1,3 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+* {
+  font-family: "Archivo", sans-serif;
+}
 header.header {
   background-color: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -314,4 +319,19 @@ a.btn-outline-primary {
   font-weight: 600;
   border-radius: 50%;
   cursor: pointer;
+}
+/* Card Login */
+.text-primary {
+  color: #00c0d1 !important;
+}
+.btn-primary {
+  background-color: #00c0d1 !important;
+  border-color: #00c0d1 !important;
+}
+.btn-primary:hover {
+  background-color: #00a0b0 !important;
+  border-color: #00a0b0 !important;
+}
+.text-info {
+  color: #01e5fa !important;
 }
