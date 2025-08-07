@@ -72,6 +72,9 @@ app.use(
 // Cấu hình thư mục chứa các file tĩnh như ảnh, CSS, JS
 app.use(express.static(`${__dirname}/public`));
 
+// Cấu hình middleware để phân tích cookie từ request
+app.use(express.json());
+
 // Sử dụng route cho phía client
 route(app);
 

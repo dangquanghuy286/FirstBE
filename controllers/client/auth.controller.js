@@ -1,25 +1,29 @@
 const md5 = require("md5");
 const User = require("../../models/user.model");
+const { generateRandomNumber } = require("../../helpers/generate");
+const ForgotPassword = require("../../models/forgotPassword.model");
 
-// [GET]  /user/logout
+// [GET] /user/logout
 module.exports.logout = (req, res) => {
   res.clearCookie("tokenUser");
   req.flash("success", "Đăng xuất thành công");
   res.redirect("/user/login");
 };
 
-// [GET]  /user/login
+// [GET] /user/login
 module.exports.login = (req, res) => {
   res.render("client/pages/auth/login", {
     title: "Login",
   });
 };
-// [GET]  /user/register
+
+// [GET] /user/register
 module.exports.register = (req, res) => {
   res.render("client/pages/auth/register", {
     title: "Register",
   });
 };
+
 // [POST] /user/register
 module.exports.registerPost = async (req, res) => {
   const exitEmail = await User.findOne({
@@ -39,6 +43,7 @@ module.exports.registerPost = async (req, res) => {
   res.redirect("/user/login");
   console.log(user);
 };
+
 // [POST] /user/login
 module.exports.loginPost = async (req, res) => {
   try {
@@ -83,4 +88,147 @@ module.exports.loginPost = async (req, res) => {
     req.flash("error", "Có lỗi xảy ra trong quá trình đăng nhập");
     res.redirect(req.get("referer"));
   }
+};
+
+// [GET] /user/password/sendEmail
+module.exports.sendEmail = (req, res) => {
+  res.render("client/pages/auth/sendEmail", {
+    title: "Send Email",
+  });
+};
+
+// [POST] /user/password/forgot-password
+module.exports.forgotPassword = async (req, res) => {
+  const email = req.body.email;
+  const user = await User.findOne({
+    email: email,
+    deleted: false,
+  });
+  if (!user) {
+    req.flash("error", "Email không tồn tại");
+    res.redirect(req.get("referer"));
+    return;
+  }
+  // Lưu thông tin vào DB
+  const obj = {
+    email: user.email,
+    otp: generateRandomNumber(6),
+    expireAt: new Date(Date.now() + 10 * 60 * 1000), // 10 phút
+  };
+  const forgotPassword = new ForgotPassword(obj);
+  await forgotPassword.save();
+  // Nếu email tồn tại, gửi email reset mật khẩu
+
+  res.redirect(`/user/password/verify-otp?email=${email}`);
+};
+
+// [GET] /user/password/verify-otp
+module.exports.verifyOTP = async (req, res) => {
+  res.render("client/pages/auth/verifyOTP", {
+    title: "Verify OTP",
+    email: req.query.email,
+  });
+};
+
+// [POST] /user/password/verify-otp
+module.exports.postOTP = async (req, res) => {
+  const email = req.body.email;
+  let otp = req.body["otp[]"]; // Truy cập mảng OTP
+  // Kiểm tra nếu mảng OTP không tồn tại hoặc rỗng
+  if (!otp || !Array.isArray(otp) || otp.length === 0) {
+    req.flash("error", "Vui lòng nhập đầy đủ mã OTP");
+    res.redirect(req.get("referer"));
+    return;
+  }
+
+  // Chuyển mảng OTP thành chuỗi
+  otp = otp.filter((digit) => digit && digit.trim()).join("");
+  console.log("OTP sau khi nối:", otp);
+
+  // Kiểm tra độ dài OTP
+  if (!otp || otp.length !== 6) {
+    req.flash("error", "Mã OTP phải có đủ 6 chữ số");
+    res.redirect(req.get("referer"));
+    return;
+  }
+
+  try {
+    // Kiểm tra OTP trong cơ sở dữ liệu
+    const forgotPassword = await ForgotPassword.findOne({
+      email: email,
+      otp: otp,
+    });
+
+    if (!forgotPassword) {
+      // Debug: Ghi lại các bản ghi OTP hiện có
+      const existingRecords = await ForgotPassword.find({ email: email });
+      req.flash("error", "OTP không hợp lệ hoặc đã hết hạn");
+      res.redirect(req.get("referer"));
+      return;
+    }
+
+    // Kiểm tra thời gian hết hạn
+    if (new Date() > forgotPassword.expireAt) {
+      req.flash("error", "Mã OTP đã hết hạn");
+      res.redirect(req.get("referer"));
+      return;
+    }
+
+    // Tìm người dùng
+    const user = await User.findOne({
+      email: email,
+      deleted: false,
+    });
+
+    if (!user) {
+      req.flash("error", "Người dùng không tồn tại");
+      res.redirect(req.get("referer"));
+      return;
+    }
+
+    // Xóa OTP đã sử dụng để tránh tái sử dụng
+    await ForgotPassword.deleteOne({ _id: forgotPassword._id });
+
+    // Thiết lập cookie và chuyển hướng
+    res.cookie("tokenUser", user.tokenUser, {
+      maxAge: 900000, // 15 phút
+      httpOnly: true,
+    });
+
+    req.flash("success", "Xác thực OTP thành công");
+    res.redirect("/user/password/reset-password?email=" + email);
+  } catch (error) {
+    console.error("Lỗi xác thực OTP:", error);
+    req.flash("error", "Có lỗi xảy ra trong quá trình xác thực");
+    res.redirect(req.get("referer"));
+  }
+};
+
+// [GET] /user/password/reset-password
+module.exports.resetPassword = async (req, res) => {
+  res.render("client/pages/auth/resetPassword", {
+    title: "Reset Password",
+  });
+};
+// [POST] /user/password/reset-password
+module.exports.resetPasswordPost = async (req, res) => {
+  const newPassword = req.body.newPassword;
+
+  const tokenUser = req.cookies.tokenUser;
+
+  if (!tokenUser) {
+    req.flash("error", "Bạn cần đăng nhập để thực hiện thao tác này");
+    res.redirect("/user/login");
+    return;
+  }
+  await User.updateOne(
+    {
+      tokenUser: tokenUser,
+    },
+    {
+      password: md5(newPassword),
+    }
+  );
+  req.flash("success", "Đặt lại mật khẩu thành công");
+  res.redirect("/");
 };

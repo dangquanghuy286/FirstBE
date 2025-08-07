@@ -1,0 +1,31 @@
+extends ../../layouts/layoutDefault.pug
+include ../../mixins/alert.pug
+
+block content
+  .bg-white.py-5
+    .container
+
+      .mx-auto.p-4.bg-white.border.border-secondary.rounded.shadow(style="max-width: 500px;")
+        .d-flex.align-items-center.gap-3.mb-4
+          i.fas.fa-arrow-left.text-primary.fs-4.cursor-pointer(
+            onclick="window.location.href='/user/login'"
+          )
+          p.fs-3.fw-bold.text-dark.mb-0 Đặt Lại Mật Khẩu
+
+        // Hiển thị alert nếu có
+        +alert-error(error)
+        +alert-success(success)
+
+        form(method="POST" action="/user/password/forgot-password")
+          .d-flex.flex-column.gap-3.mt-4
+            input.form-control(
+              type="email",
+              name="email",
+              placeholder="Nhập Email Của Bạn ..."
+              required
+            )
+
+            button.btn.btn-primary.fw-semibold.rounded-pill(
+              type="submit"
+              disabled=loading ? true : false
+            ) #{loading ? 'Đang Gửi...' : 'Gửi'}
