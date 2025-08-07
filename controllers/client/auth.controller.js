@@ -2,6 +2,7 @@ const md5 = require("md5");
 const User = require("../../models/user.model");
 const { generateRandomNumber } = require("../../helpers/generate");
 const ForgotPassword = require("../../models/forgotPassword.model");
+const sendEmail = require("../../helpers/sendMail");
 
 // [GET] /user/logout
 module.exports.logout = (req, res) => {
@@ -118,7 +119,20 @@ module.exports.forgotPassword = async (req, res) => {
   const forgotPassword = new ForgotPassword(obj);
   await forgotPassword.save();
   // Nếu email tồn tại, gửi email reset mật khẩu
+  const subject = "Reset Password";
+  const html = `
+  <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+    <h2 style="color: #007BFF;">Xác thực OTP</h2>
+    <p>Xin chào,</p>
+    <p>OTP của bạn là: <strong style="font-size: 1.5em;">${obj.otp}</strong></p>
+    <p>Mã này sẽ hết hạn sau <strong>3 phút</strong>. Vui lòng không chia sẻ mã này với bất kỳ ai.</p>
+    <br/>
+    <p>Trân trọng,</p>
+    <p><em>Đội ngũ hỗ trợ</em></p>
+  </div>
+`;
 
+  await sendEmail.sendMail(email, subject, html);
   res.redirect(`/user/password/verify-otp?email=${email}`);
 };
 
