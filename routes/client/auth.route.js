@@ -21,4 +21,5 @@ router.post(
   validate.resetPasswordPost,
   controller.resetPasswordPost
 );
+router.get("/profile", controller.profile);
 module.exports = router;

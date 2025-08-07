@@ -1,0 +1,81 @@
+//- views/admin/profile.pug
+extends ../../layouts/layoutDefault.pug
+
+block content
+  .container.mt-5
+    .row.justify-content-center
+      .col-12.col-md-6.bg-white.p-4.rounded.shadow.border
+        h2.text-center.mb-4.text-primary Thông Tin Quản Trị Viên
+
+        form(method="POST" action="/admin/update")
+          // Tên Admin
+          .mb-3
+            label.form-label Tên Admin 
+              span.text-danger *
+            input.form-control(
+              type="text"
+              name="fullName"
+              required
+              value=infoUser.fullName
+              placeholder="Nhập họ tên admin..."
+            )
+
+          // Tên đăng nhập
+          .mb-3
+            label.form-label Tên đăng nhập 
+              span.text-danger *
+            input.form-control(
+              type="text"
+              name="userName"
+              readonly
+              disabled
+              value=infoUser.userName
+            )
+
+          // Ngày sinh
+          .mb-3
+            label.form-label Ngày sinh
+            input.form-control(
+              type="date"
+              name="date_of_birth"
+              value=infoUser.date_of_birth
+            )
+
+          // Email
+          .mb-3
+            label.form-label Email
+            input.form-control(
+              type="email"
+              name="email"
+              readonly
+              disabled
+              value=infoUser.email
+            )
+
+          // Số điện thoại
+          .mb-3
+            label.form-label Số điện thoại
+            input.form-control(
+              type="tel"
+              name="phone_number"
+              value=infoUser.phone_number
+              placeholder="Ví dụ: 0987654321"
+            )
+
+          // Địa chỉ
+          .mb-3
+            label.form-label Địa chỉ
+            input.form-control(
+              type="text"
+              name="address"
+              value=infoUser.address
+              placeholder="Nhập địa chỉ"
+            )
+
+          // Link đổi mật khẩu
+          .text-end.mt-2
+            a(href="/user/password/reset-password" class="text-info text-decoration-underline") Thay đổi mật khẩu
+
+          // Nút cập nhật
+          .mt-4.d-flex.justify-content-end
+            button.btn.btn-primary(type="submit") Cập nhật
