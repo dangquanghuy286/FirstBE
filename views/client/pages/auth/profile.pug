@@ -16,7 +16,7 @@ block content
               type="text"
               name="fullName"
               required
-              value=infoUser.fullName
+              value=user.fullName
               placeholder="Nhập họ tên admin..."
             )
 
@@ -29,7 +29,7 @@ block content
               name="userName"
               readonly
               disabled
-              value=infoUser.userName
+              value=user.userName
             )
 
           // Ngày sinh
@@ -38,7 +38,7 @@ block content
             input.form-control(
               type="date"
               name="date_of_birth"
-              value=infoUser.date_of_birth
+              value=user.date_of_birth
             )
 
           // Email
@@ -49,7 +49,7 @@ block content
               name="email"
               readonly
               disabled
-              value=infoUser.email
+              value=user.email
             )
 
           // Số điện thoại
@@ -58,7 +58,7 @@ block content
             input.form-control(
               type="tel"
               name="phone_number"
-              value=infoUser.phone_number
+              value=user.phone_number
               placeholder="Ví dụ: 0987654321"
             )
 
@@ -68,7 +68,7 @@ block content
             input.form-control(
               type="text"
               name="address"
-              value=infoUser.address
+              value=user.address
               placeholder="Nhập địa chỉ"
             )
 

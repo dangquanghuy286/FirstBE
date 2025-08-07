@@ -248,24 +248,7 @@ module.exports.resetPasswordPost = async (req, res) => {
 };
 // [GET] /user/profile
 module.exports.profile = async (req, res) => {
-  const tokenUser = req.cookies.tokenUser;
-
-  if (!tokenUser) {
-    req.flash("error", "Bạn cần đăng nhập để thực hiện thao tác này");
-    res.redirect("/user/login");
-    return;
-  }
-
-  const user = await User.findOne({ tokenUser: tokenUser }).select("-password");
-
-  if (!user) {
-    req.flash("error", "Người dùng không tồn tại");
-    res.redirect("/user/login");
-    return;
-  }
-
   res.render("client/pages/auth/profile", {
     title: "Profile",
-    infoUser: user,
   });
 };
