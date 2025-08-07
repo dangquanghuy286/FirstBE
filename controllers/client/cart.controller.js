@@ -41,9 +41,12 @@ module.exports.addPost = async (req, res) => {
   const quantity = parseInt(req.body.quantity);
   const cartId = req.cookies.cartId;
 
-  const cart = await Carts.findOne({
-    _id: cartId,
-  });
+  const cart = await Carts.findOne({ _id: cartId });
+  if (!cart) {
+    req.flash("error", "Giỏ hàng không tồn tại!");
+    return res.redirect(req.get("referer") || "/");
+  }
+
   const exitPrd = cart.product.find((i) => i.product_id == productId);
   if (exitPrd) {
     const newPr = quantity + exitPrd.quantity;

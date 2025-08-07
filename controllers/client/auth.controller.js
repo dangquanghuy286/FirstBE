@@ -3,6 +3,7 @@ const User = require("../../models/user.model");
 const { generateRandomNumber } = require("../../helpers/generate");
 const ForgotPassword = require("../../models/forgotPassword.model");
 const sendEmail = require("../../helpers/sendMail");
+const Carts = require("../../models/card.model");
 
 // [GET] /user/logout
 module.exports.logout = (req, res) => {
@@ -51,20 +52,17 @@ module.exports.loginPost = async (req, res) => {
     const user = req.body.userName;
     const password = req.body.password;
 
-    // Tìm user theo userName
     const userLogin = await User.findOne({
       userName: user,
       deleted: false,
     });
 
-    // Nếu không tìm thấy user
     if (!userLogin) {
       req.flash("error", "Tên đăng nhập không đúng");
       res.redirect(req.get("referer"));
       return;
     }
 
-    // Kiểm tra mật khẩu
     if (md5(password) !== userLogin.password) {
       req.flash("error", "Mật khẩu không đúng");
       res.redirect(req.get("referer"));
@@ -77,8 +75,43 @@ module.exports.loginPost = async (req, res) => {
       return;
     }
 
+    const cartId = req.cookies.cartId;
+    let cart = await Carts.findOne({ _id: cartId });
+
+    if (!cart) {
+      // Tạo giỏ hàng mới nếu không tồn tại
+      cart = await Carts.create({ user_Id: userLogin.id, product: [] });
+      res.cookie("cartId", cart._id, { maxAge: 30 * 24 * 60 * 60 * 1000 });
+    } else {
+      // Cập nhật user_Id cho giỏ hàng hiện tại
+      await Carts.updateOne({ _id: cartId }, { user_Id: userLogin.id });
+    }
+
+    // Hợp nhất giỏ hàng nếu người dùng đã có giỏ hàng khác
+    const existingUserCart = await Carts.findOne({
+      user_Id: userLogin.id,
+      _id: { $ne: cartId },
+    });
+    if (existingUserCart) {
+      for (const item of existingUserCart.product) {
+        const exitPrd = cart.product.find(
+          (i) => i.product_id == item.product_id
+        );
+        if (exitPrd) {
+          await Carts.updateOne(
+            { _id: cartId, "product.product_id": item.product_id },
+            { $set: { "product.$.quantity": exitPrd.quantity + item.quantity } }
+          );
+        } else {
+          await Carts.updateOne({ _id: cartId }, { $push: { product: item } });
+        }
+      }
+      // Xóa giỏ hàng cũ
+      await Carts.deleteOne({ _id: existingUserCart._id });
+    }
+
     res.cookie("tokenUser", userLogin.tokenUser, {
-      maxAge: 900000, // 15 phút
+      maxAge: 900000,
       httpOnly: true,
     });
 
