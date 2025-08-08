@@ -8,6 +8,10 @@ const moment = require("moment");
 //Thư viện hỗ trợ TinyMCE
 var path = require("path");
 
+// Cấu hình socketIo
+const http = require("http");
+const { Server } = require("socket.io");
+
 // Load biến môi trường từ file .env
 require("dotenv").config();
 
@@ -40,6 +44,13 @@ db.connect();
 // Khởi tạo ứng dụng express
 const app = express();
 
+// Socket.io
+const server = http.createServer(app);
+const io = new Server(server);
+io.on("connection", (socket) => {
+  console.log("A user connected", socket.id);
+});
+// End socket.io
 // Dùng method override để xử lý các HTTP method như PUT và DELETE thông qua query _method
 app.use(methodOverride("_method"));
 
@@ -89,6 +100,6 @@ app.use((req, res) => {
   });
 });
 // Khởi động server và lắng nghe trên cổng đã khai báo
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

@@ -1,0 +1,36 @@
+extends ../../layouts/layoutDefault.pug
+
+block content
+  .container.my-3
+    .row
+      .col-12
+        h3.box-head Chat
+
+    .row
+      .col-12
+        .chat
+          .inner-body
+            .inner-incoming
+              .inner-name Em Yêu
+              .inner-content A ơi sang nhà em nha, nha em không có ai ở nhà cả
+
+            .inner-outgoing
+              .inner-content Thế à? Ok iuu
+
+            .inner-incoming
+              .inner-name Em Yêu
+              .inner-content Nhanh nha, nhanh nha
+
+          .inner-foot
+            form.inner-form(action="", onsubmit="return false;")
+              .input-group
+                input#chatInput.form-control(
+                  type="text",
+                  placeholder="Nhập nội dung..."
+                  name="content",
+                  autocomplete="off"
+                )
+                button#emojiBtn.btn.btn-light(type="button", title="Chọn emoji")
+                    i.fa-solid.fa-face-smile
+                button#chatSend.btn.btn-info(type="button")
+                  i.fa-solid.fa-paper-plane

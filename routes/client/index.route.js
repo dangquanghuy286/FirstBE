@@ -8,6 +8,7 @@ const searchRoute = require("./search.route");
 const cartRoute = require("./cart.route");
 const checkoutRoute = require("./checkout.route");
 const loginRoute = require("./auth.route");
+const chatRoute = require("./chat.route");
 
 module.exports = (app) => {
   app.use(category.category);
@@ -20,4 +21,5 @@ module.exports = (app) => {
   app.use("/cart", cartRoute);
   app.use("/checkout", checkoutRoute);
   app.use("/user", loginRoute);
+  app.use("/chat", chatRoute);
 };

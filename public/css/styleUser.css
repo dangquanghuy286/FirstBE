@@ -398,3 +398,99 @@ a.btn-outline-primary {
 .text-info {
   color: #01e5fa !important;
 }
+/* CHAT */
+.chat {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.inner-body {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background-color: #f7f7f7;
+}
+
+.inner-incoming,
+.inner-outgoing {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+  margin-bottom: 10px;
+}
+
+.inner-incoming {
+  align-items: flex-start;
+  margin-right: auto; /* co vào bên trái */
+  max-width: 70%;
+}
+
+.inner-outgoing {
+  align-items: flex-end;
+  margin-left: auto; /* co vào bên phải */
+  max-width: 70%; /* giới hạn giống bên incoming */
+}
+
+.inner-name {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 3px;
+}
+
+.inner-content {
+  padding: 10px 14px;
+  border-radius: 15px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.inner-incoming .inner-content {
+  background-color: #eaeaea;
+  color: #000;
+  border-top-left-radius: 0;
+}
+
+.inner-outgoing .inner-content {
+  background-color: #0d6efd;
+  color: #fff;
+  border-top-right-radius: 0;
+}
+
+.inner-foot {
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.input-group {
+  display: flex;
+  gap: 5px; /* Khoảng cách giữa emoji, input và nút gửi */
+}
+
+#emojiBtn {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#chatInput {
+  flex: 1;
+  border-radius: 20px;
+}
+
+#chatSend {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
