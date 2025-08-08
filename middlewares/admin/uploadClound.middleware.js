@@ -39,6 +39,7 @@ module.exports.uploadCloud = async (req, res, next) => {
       // Lưu đường dẫn ảnh đã upload vào thuộc tính 'thumbnail' trong body request
       req.body.thumbnail = result.secure_url;
       req.body.avatar = result.secure_url;
+      req.body.logo = result.secure_url;
     } catch (error) {
       // In lỗi ra console và trả về lỗi 500 nếu upload thất bại
       console.error("Upload error:", error);

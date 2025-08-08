@@ -2,8 +2,8 @@ include ../mixins/sub-menu.pug
 header.header
   .container
     .logo
-      img(src="/images/favicon.png", alt="Logo", width="50")
-      h1 My Website
+      img(src=settingGeneral.logo, alt="Logo", width="50")
+      h1 #{settingGeneral.websiteName}
     nav.nav
       ul.menu
         li: a(href="/") Trang chủ

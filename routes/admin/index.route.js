@@ -7,6 +7,7 @@ const role = require("./role.route");
 const account = require("./account.route");
 const auth = require("./auth.route");
 const myaccount = require("./myaccount.route");
+const setting = require("./setting.route");
 
 module.exports = (app) => {
   app.use(
@@ -31,5 +32,6 @@ module.exports = (app) => {
     authMid.requireAuth,
     myaccount
   );
+  app.use(`${systemConfig.prefixAdmin}/setting`, authMid.requireAuth, setting);
   app.use(`${systemConfig.prefixAdmin}/auth`, auth);
 };

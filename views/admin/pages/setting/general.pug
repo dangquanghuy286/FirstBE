@@ -1,0 +1,40 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block content
+  .container.mt-5
+    +alert-success("5000")
+    +alert-error("5000")
+    h2.mb-4 Cài đặt chung
+    form(method="POST", action=`${prefixAdmin}/setting/general?_method=PATCH`, enctype="multipart/form-data")
+      .mb-3
+        label.form-label(for="websiteName") Tên website
+        input#websiteName.form-control(type="text", name="websiteName", placeholder="Nhập tên website", value=(setting && setting.websiteName || ""))
+      .mb-3
+        label.form-label(for="logo") Logo
+        input#logo.form-control(type="file", name="logo", accept="image/*", upload-images-input)
+        img(src=(setting && setting.logo || ""), alt="", class="image-preview", upload-images-preview)
+      .mb-3
+        label.form-label(for="phone") Số điện thoại
+        input#phone.form-control(type="text", name="phone", placeholder="Nhập số điện thoại", value=(setting && setting.phone || ""))
+        
+      .mb-3
+        label.form-label(for="email") Email
+        input#email.form-control(type="email", name="email", placeholder="Nhập email", value=(setting && setting.email || ""))
+      .mb-3
+        label.form-label(for="address") Địa chỉ
+        input#address.form-control(type="text", name="address", placeholder="Nhập địa chỉ", value=(setting && setting.address || ""))
+      .mb-3
+        label.form-label(for="copyRight") Copyright
+        input#copyRight.form-control(type="text", name="copyRight", placeholder="Nhập thông tin bản quyền", value=(setting && setting.copyRight || ""))
+      //- Nhóm tài khoản mạng xã hội
+      h4.mt-4.mb-3 Tài khoản mạng xã hội
+      .mb-3
+        label.form-label(for="facebook") Facebook
+        input#facebook.form-control(type="text", name="socialLinks[facebook]", placeholder="Link Facebook", value=(setting && setting.socialLinks && setting.socialLinks.facebook || ""))
+      .mb-3
+        label.form-label(for="tiktok") Tiktok
+        input#tiktok.form-control(type="text", name="socialLinks[tiktok]", placeholder="Link Tiktok", value=(setting && setting.socialLinks && setting.socialLinks.tiktok || ""))
+      .mb-3
+        label.form-label(for="instagram") Instagram
+        input#instagram.form-control(type="text", name="socialLinks[instagram]", placeholder="Link Instagram", value=(setting && setting.socialLinks && setting.socialLinks.instagram || ""))
+      button.btn.btn-primary(type="submit") Cập nhật
