@@ -1,5 +1,50 @@
 extends ../../layouts/default.pug
 
 block content
-  h1= title
-  p Welcome to the Admin Dashboard
+  .container.mt-4
+    .row.g-3
+      // Danh mục sản phẩm
+      .col-md-6.col-lg-3
+        .card.h-100.shadow-sm
+          .card-header.bg-light Danh mục sản phẩm
+          .card-body
+            p.mb-1 Số lượng: 
+              b #{statistic.categoryProduct.total}
+            p.mb-1 Hoạt động: 
+              b #{statistic.categoryProduct.active}
+            p.mb-0.text-muted Dừng hoạt động: 
+              b #{statistic.categoryProduct.inactive}
+      // Sản phẩm
+      .col-md-6.col-lg-3
+        .card.h-100.shadow-sm
+          .card-header.bg-light Sản phẩm
+          .card-body
+            p.mb-1 Số lượng: 
+              b #{statistic.product.total}
+            p.mb-1 Hoạt động: 
+              b #{statistic.product.active}
+            p.mb-0.text-muted Dừng hoạt động: 
+              b #{statistic.product.inactive}
+      // Tài khoản admin
+      .col-md-6.col-lg-3
+        .card.h-100.shadow-sm
+          .card-header.bg-light Tài khoản admin
+          .card-body
+            p.mb-1 Số lượng: 
+              b #{statistic.account.total}
+            p.mb-1 Hoạt động: 
+              b #{statistic.account.active}
+            p.mb-0.text-muted Dừng hoạt động: 
+              b #{statistic.account.inactive}
+
+      // Tài khoản client
+      .col-md-6.col-lg-3
+        .card.h-100.shadow-sm
+          .card-header.bg-light Tài khoản client
+          .card-body
+            p.mb-1 Số lượng: 
+              b #{statistic.user.total}
+            p.mb-1 Hoạt động: 
+              b #{statistic.user.active}
+            p.mb-0.text-muted Dừng hoạt động: 
+              b #{statistic.user.inactive}
