@@ -20,7 +20,10 @@ header.header
 
     if(user)
       .auth.d-flex.align-items-center.gap-2
+        a(href="/chat" class="btn btn-primary") 
+          i.fas.fa-comments
         a(href="/user/profile" class="btn btn-primary") #{user.userName}
+        
         a(href="/cart", class="btn btn-outline-secondary position-relative")
           i.fas.fa-shopping-cart
           span.badge.bg-danger.text-white.position-absolute.top-0.start-100.translate-middle.rounded-circle(style="font-size: 0.7rem") #{miniCart && miniCart.totalQuantity ? miniCart.totalQuantity : 0}

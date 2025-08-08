@@ -40,9 +40,9 @@ module.exports.registerPost = async (req, res) => {
   const user = new User(req.body);
   await user.save();
 
-  res.cookie("tokenUser", user.tokenUser, { maxAge: 900000, httpOnly: true });
+  res.cookie("tokenUser", user.tokenUser);
   req.flash("success", "Dang ky thanh cong");
-  res.redirect("/user/login");
+  res.redirect("/");
   console.log(user);
 };
 
@@ -110,10 +110,7 @@ module.exports.loginPost = async (req, res) => {
       await Carts.deleteOne({ _id: existingUserCart._id });
     }
 
-    res.cookie("tokenUser", userLogin.tokenUser, {
-      maxAge: 900000,
-      httpOnly: true,
-    });
+    res.cookie("tokenUser", userLogin.tokenUser);
 
     req.flash("success", "Đăng nhập thành công");
     res.redirect("/");

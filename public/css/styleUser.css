@@ -408,6 +408,27 @@ a.btn-outline-primary {
   overflow: hidden;
 }
 
+.inner-head {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.inner-head .inner-name {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.inner-head .inner-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .inner-body {
   flex: 1;
   padding: 15px;
@@ -420,77 +441,122 @@ a.btn-outline-primary {
   display: flex;
   flex-direction: column;
   max-width: 70%;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .inner-incoming {
   align-items: flex-start;
-  margin-right: auto; /* co vào bên trái */
-  max-width: 70%;
+  margin-right: auto; /* đẩy về bên trái */
 }
 
 .inner-outgoing {
   align-items: flex-end;
-  margin-left: auto; /* co vào bên phải */
-  max-width: 70%; /* giới hạn giống bên incoming */
+  margin-left: auto; /* đẩy về bên phải */
 }
 
-.inner-name {
+/* Tên người gửi chỉ hiện với tin nhắn incoming */
+.inner-incoming .inner-name {
   font-size: 0.8rem;
   color: #666;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+
+/* Ẩn tên với tin nhắn outgoing vì đó là tin nhắn của chính mình */
+.inner-outgoing .inner-name {
+  display: none;
 }
 
 .inner-content {
-  padding: 10px 14px;
-  border-radius: 15px;
+  padding: 12px 16px;
+  border-radius: 18px;
   font-size: 0.95rem;
   line-height: 1.4;
   word-break: break-word;
+  max-width: 100%;
 }
 
 .inner-incoming .inner-content {
-  background-color: #eaeaea;
+  background-color: #e4e6ea;
   color: #000;
-  border-top-left-radius: 0;
+  border-bottom-left-radius: 4px;
 }
 
 .inner-outgoing .inner-content {
-  background-color: #0d6efd;
+  background-color: #00c0d1;
   color: #fff;
-  border-top-right-radius: 0;
+  border-bottom-right-radius: 4px;
 }
 
 .inner-foot {
-  padding: 10px;
+  padding: 15px;
   border-top: 1px solid #ddd;
   background-color: #fff;
 }
 
 .input-group {
   display: flex;
-  gap: 5px; /* Khoảng cách giữa emoji, input và nút gửi */
+  gap: 8px;
+  align-items: center;
 }
 
 #emojiBtn {
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #ddd;
+}
+
+#emojiBtn:hover {
+  background-color: #f0f0f0;
 }
 
 #chatInput {
   flex: 1;
   border-radius: 20px;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+}
+
+#chatInput:focus {
+  outline: none;
+  border-color: #00c0d1;
+  box-shadow: 0 0 0 2px rgba(0, 132, 255, 0.2);
 }
 
 #chatSend {
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #00c0d1;
+  border: none;
+  color: white;
+}
+
+#chatSend:hover {
+  background-color: #0056b3;
+}
+
+/* Scrollbar cho inner-body */
+.inner-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.inner-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.inner-body::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.inner-body::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }

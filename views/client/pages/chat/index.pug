@@ -2,35 +2,48 @@ extends ../../layouts/layoutDefault.pug
 
 block content
   .container.my-3
-    .row
+    .row  
       .col-12
         h3.box-head Chat
-
     .row
       .col-12
-        .chat
+        .chat(my-id=user.id)
+          .inner-head
+            .inner-avatar
+              if otherUser 
+                img(src=otherUser.avatar || 'https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png', alt=otherUser.userName || 'Khách avatar')
+              else
+                img(src='/default-avatar.png', alt='Khách avatar')
+            .inner-name #{otherUser ? otherUser.userName : 'Khách'}
+
+
           .inner-body
-            .inner-incoming
-              .inner-name Em Yêu
-              .inner-content A ơi sang nhà em nha, nha em không có ai ở nhà cả
-
-            .inner-outgoing
-              .inner-content Thế à? Ok iuu
-
-            .inner-incoming
-              .inner-name Em Yêu
-              .inner-content Nhanh nha, nhanh nha
-
+            each chat in chats
+              // Sử dụng toString() để so sánh ObjectId
+              if chat.user_Id.toString() === infoUser._id.toString()
+                // Tin nhắn của mình (outgoing) - không hiện tên
+                .inner-outgoing
+                  .inner-content
+                    | #{chat.content}
+              else
+                // Tin nhắn của người khác (incoming) - hiện tên
+                .inner-incoming
+                  if chat.infoUser
+                    .inner-name #{chat.infoUser.userName}
+                  .inner-content
+                    | #{chat.content}
+                
+                  
           .inner-foot
-            form.inner-form(action="", onsubmit="return false;")
+            form.inner-form(action="")
               .input-group
                 input#chatInput.form-control(
                   type="text",
-                  placeholder="Nhập nội dung..."
+                  placeholder="Nhập nội dung...",
                   name="content",
                   autocomplete="off"
                 )
                 button#emojiBtn.btn.btn-light(type="button", title="Chọn emoji")
-                    i.fa-solid.fa-face-smile
-                button#chatSend.btn.btn-info(type="button")
+                  i.fa-solid.fa-face-smile
+                button#chatSend.btn.btn-info(type="submit", title="Gửi tin nhắn")
                   i.fa-solid.fa-paper-plane

@@ -47,9 +47,7 @@ const app = express();
 // Socket.io
 const server = http.createServer(app);
 const io = new Server(server);
-io.on("connection", (socket) => {
-  console.log("A user connected", socket.id);
-});
+global._io = io;
 // End socket.io
 // Dùng method override để xử lý các HTTP method như PUT và DELETE thông qua query _method
 app.use(methodOverride("_method"));
