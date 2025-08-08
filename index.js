@@ -81,6 +81,13 @@ route(app);
 // Sử dụng route cho phía admin
 routeAdmin(app);
 
+// 404 page
+app.use((req, res) => {
+  res.status(404).render("admin/partials/error404", {
+    title: "Page Not Found",
+    message: "The page you are looking for does not exist.",
+  });
+});
 // Khởi động server và lắng nghe trên cổng đã khai báo
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
