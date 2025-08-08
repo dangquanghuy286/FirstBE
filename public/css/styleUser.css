@@ -449,22 +449,34 @@ a.btn-outline-primary {
   margin-right: auto; /* đẩy về bên trái */
 }
 
-.inner-outgoing {
-  align-items: flex-end;
-  margin-left: auto; /* đẩy về bên phải */
-}
-
-/* Tên người gửi chỉ hiện với tin nhắn incoming */
 .inner-incoming .inner-name {
   font-size: 0.8rem;
   color: #666;
   margin-bottom: 5px;
-  margin-left: 5px;
+  margin-left: 48px; /* căn lề để khỏi trùng avatar */
+}
+
+.inner-message-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inner-incoming .inner-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 /* Ẩn tên với tin nhắn outgoing vì đó là tin nhắn của chính mình */
 .inner-outgoing .inner-name {
   display: none;
+}
+
+.inner-outgoing {
+  align-items: flex-end; /* Align outgoing messages to the right */
+  margin-left: auto; /* Push to the right */
 }
 
 .inner-content {
@@ -498,20 +510,6 @@ a.btn-outline-primary {
   display: flex;
   gap: 8px;
   align-items: center;
-}
-
-#emojiBtn {
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #ddd;
-}
-
-#emojiBtn:hover {
-  background-color: #f0f0f0;
 }
 
 #chatInput {
@@ -559,4 +557,96 @@ a.btn-outline-primary {
 
 .inner-body::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+/* Emoji Picker */
+#emojiBtn {
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ddd;
+}
+
+#emojiBtn:hover {
+  background-color: #f0f0f0;
+}
+
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none; /* Không nhận sự kiện chuột */
+  transition: opacity 0.3s ease;
+}
+
+.tooltip.shown {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto; /* Bật lại sự kiện khi hiện */
+}
+
+/* Container gợi ý typing */
+.inner-list-typing {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Khung mỗi người đang typing */
+.box-typing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background-color: #f0f0f0;
+  border-radius: 20px;
+  max-width: 200px;
+}
+
+/* Tên người đang gõ */
+.box-typing .inner-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Chấm ba chấm nhấp nháy */
+.box-typing .inner-dots {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.box-typing .inner-dots span {
+  width: 6px;
+  height: 6px;
+  background-color: #666;
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: blink 1.4s infinite both;
+}
+
+.box-typing .inner-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+.box-typing .inner-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.box-typing .inner-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Hiệu ứng nhấp nháy */
+@keyframes blink {
+  0%,
+  80%,
+  100% {
+    opacity: 0.3;
+  }
+  40% {
+    opacity: 1;
+  }
 }

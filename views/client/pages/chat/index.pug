@@ -30,9 +30,14 @@ block content
                 .inner-incoming
                   if chat.infoUser
                     .inner-name #{chat.infoUser.userName}
-                  .inner-content
-                    | #{chat.content}
+                  .inner-message-row
+                    .inner-avatar
+                      img(src=chat.infoUser.avatar || 'https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png', alt=chat.infoUser.userName || 'Khách avatar')
+                    .inner-content
+                      | #{chat.content}
+
                 
+            .inner-list-typing
                   
           .inner-foot
             form.inner-form(action="")
@@ -43,7 +48,9 @@ block content
                   name="content",
                   autocomplete="off"
                 )
-                button#emojiBtn.btn.btn-light(type="button", title="Chọn emoji")
+                span#emojiBtn.button-icon.btn.btn-light(title="Chọn emoji")
                   i.fa-solid.fa-face-smile
                 button#chatSend.btn.btn-info(type="submit", title="Gửi tin nhắn")
                   i.fa-solid.fa-paper-plane
+  div.tooltip(role="tooltip")
+    emoji-picker.light

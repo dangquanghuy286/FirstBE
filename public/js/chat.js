@@ -1,3 +1,5 @@
+import * as Popper from "https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js";
+
 // Client send message
 const formSendMessage = document.querySelector(".chat .inner-form");
 if (formSendMessage) {
@@ -31,7 +33,19 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
         ? `<div class="inner-name">${data.userName}</div>`
         : ""
     }
-    <div class="inner-content">${data.content}</div>
+    <div class="inner-message-row">
+      ${
+        myId !== data.userId
+          ? `<div class="inner-avatar">
+               <img src="${
+                 data.avatar ||
+                 "https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png"
+               }" alt="${data.userName || "Khách avatar"}">
+             </div>`
+          : ""
+      }
+      <div class="inner-content">${data.content}</div>
+    </div>
   `;
 
   body.appendChild(div);
@@ -42,4 +56,64 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
 const bodyChat = document.querySelector(".chat .inner-body");
 if (bodyChat) {
   bodyChat.scrollTop = bodyChat.scrollHeight;
+}
+// Show IconChat
+// Show Popup
+const button = document.querySelector(".button-icon");
+if (button) {
+  const tooltip = document.querySelector(".tooltip");
+  Popper.createPopper(button, tooltip);
+  button.onclick = () => {
+    tooltip.classList.toggle("shown");
+  };
+}
+// Insert Emoji Picker
+const emojiPicker = document.querySelector("emoji-picker");
+if (emojiPicker) {
+  // Initialize emoji picker
+  emojiPicker.addEventListener("emoji-click", (event) => {
+    const chatInput = document.querySelector(
+      ".chat .inner-form input[name='content']"
+    );
+    chatInput.value += event.detail.unicode;
+  });
+  // Input
+  chatInput.addEventListener("keyup", () => {
+    socket.emit("CLIENT_TYPING", "show");
+    setTimeout(() => {
+      socket.emit("CLIENT_TYPING", "hidden");
+    }, 3000);
+  });
+}
+// Server return Typing
+const elementListTyping = document.querySelector(".chat .inner-list-typing");
+if (elementListTyping) {
+  socket.on("SERVER_TYPING", (data) => {
+    const existingTyping = elementListTyping.querySelector(
+      `[user-id="${data.userId}"]`
+    );
+
+    if (data.type === "show") {
+      // Nếu chưa có phần tử cho userId này, thêm mới
+      if (!existingTyping) {
+        const boxTyping = document.createElement("div");
+        boxTyping.classList.add("box-typing");
+        boxTyping.setAttribute("user-id", data.userId);
+        boxTyping.innerHTML = `
+          <div class="inner-name">${data.userName}</div>
+          <div class="inner-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        `;
+        elementListTyping.appendChild(boxTyping);
+      }
+    } else if (data.type === "hidden") {
+      // Nếu có phần tử, xóa nó đi
+      if (existingTyping) {
+        elementListTyping.removeChild(existingTyping);
+      }
+    }
+  });
 }

@@ -26,6 +26,15 @@ module.exports.index = async (req, res) => {
         avatar: avatar,
       });
     });
+    // Typing
+    socket.on("CLIENT_TYPING", (type) => {
+      // Hiển thị trạng thái đang gõ
+      socket.broadcast.emit("SERVER_TYPING", {
+        userId: userId,
+        userName: userName,
+        type: type,
+      });
+    });
   });
 
   // Lấy info của người đang đăng nhập
