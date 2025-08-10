@@ -83,6 +83,9 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
 
   bodyChat.insertBefore(div, elementListTyping);
   bodyChat.scrollTop = bodyChat.scrollHeight;
+  // Pre view Full Image
+
+  const gallery = new Viewer(div);
 });
 
 // Auto scroll to bottom on page load
@@ -158,4 +161,10 @@ if (chatInput && elementListTyping) {
       elementListTyping.removeChild(existingTyping);
     }
   });
+}
+// Pre view Full Image
+const bodyChatPreview = document.querySelector(".chat .inner-body ");
+
+if (bodyChatPreview) {
+  const gallery = new Viewer(bodyChatPreview);
 }

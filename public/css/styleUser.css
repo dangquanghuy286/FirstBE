@@ -512,28 +512,21 @@ a.btn-outline-primary {
   gap: 8px;
   margin-top: 8px;
   max-width: 100%;
+  justify-content: flex-start; /* Không cho ảnh nhảy ra giữa */
 }
 
 .inner-images img {
-  max-width: 150px; /* Giới hạn chiều rộng tối đa của hình ảnh */
-  max-height: 150px; /* Giới hạn chiều cao tối đa của hình ảnh */
-  width: auto;
-  height: auto;
-  object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
-  border-radius: 8px; /* Bo góc cho hình ảnh */
-  border: 1px solid #ddd; /* Viền nhẹ để tăng độ rõ nét */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng nhẹ */
-  transition: transform 0.2s ease; /* Hiệu ứng phóng to nhẹ khi hover */
+  width: 150px; /* Cố định chiều rộng */
+  height: 150px; /* Cố định chiều cao */
+  object-fit: cover; /* Cắt ảnh cho vừa khung */
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
 }
 
 .inner-images img:hover {
-  transform: scale(1.05); /* Phóng to nhẹ khi hover */
-}
-
-/* Đảm bảo hình ảnh trong outgoing và incoming đồng bộ */
-.inner-incoming .inner-images,
-.inner-outgoing .inner-images {
-  max-width: 70%; /* Giới hạn chiều rộng của container hình ảnh để phù hợp với nội dung tin nhắn */
+  transform: scale(1.05);
 }
 
 .inner-foot {
