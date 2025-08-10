@@ -411,7 +411,7 @@ a.btn-outline-primary {
 .inner-head {
   padding: 15px;
   border-bottom: 1px solid #ddd;
-  background-color: #f0f0f0;
+  background-color: #abe9e4;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -577,14 +577,14 @@ a.btn-outline-primary {
 .tooltip {
   visibility: hidden;
   opacity: 0;
-  pointer-events: none; /* Không nhận sự kiện chuột */
-  transition: opacity 0.3s ease;
+  pointer-events: none; /* Không cho nhận click */
+  transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
 .tooltip.shown {
   visibility: visible;
   opacity: 1;
-  pointer-events: auto; /* Bật lại sự kiện khi hiện */
+  pointer-events: auto; /* Cho click lại khi hiện */
 }
 
 /* Container gợi ý typing */

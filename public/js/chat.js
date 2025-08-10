@@ -1,7 +1,15 @@
 import * as Popper from "https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js";
+const upload = new FileUploadWithPreview.FileUploadWithPreview("my-unique-id");
+// Cache DOM elements
+const formSendMessage = document.querySelector(".chat .inner-form");
+const bodyChat = document.querySelector(".chat .inner-body");
+const chatInput = document.querySelector(
+  ".chat .inner-form input[name='content']"
+);
+const elementListTyping = document.querySelector(".chat .inner-list-typing");
+const myId = document.querySelector("[my-id]")?.getAttribute("my-id");
 
 // Client send message
-const formSendMessage = document.querySelector(".chat .inner-form");
 if (formSendMessage) {
   formSendMessage.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -15,86 +23,89 @@ if (formSendMessage) {
 
 // Server send message
 socket.on("SERVER_SEND_MESSAGE", (data) => {
-  const myId = document.querySelector("[my-id]").getAttribute("my-id");
-  const body = document.querySelector(".chat .inner-body");
+  if (!bodyChat || !elementListTyping) return;
+
   const div = document.createElement("div");
+  const isMyMessage = myId === data.userId;
 
-  // Thêm class dựa trên người gửi
-  if (myId === data.userId) {
-    div.classList.add("inner-outgoing");
-  } else {
-    div.classList.add("inner-incoming");
-  }
+  // Add class based on sender
+  div.classList.add(isMyMessage ? "inner-outgoing" : "inner-incoming");
 
-  // Tạo cấu trúc HTML - LUÔN LUÔN hiển thị tên cho tin nhắn incoming
+  // Create HTML structure
   div.innerHTML = `
-    ${
-      myId !== data.userId
-        ? `<div class="inner-name">${data.userName}</div>`
-        : ""
-    }
+    ${!isMyMessage ? `<div class="inner-name">${data.userName}</div>` : ""}
     <div class="inner-message-row">
       ${
-        myId !== data.userId
+        !isMyMessage
           ? `<div class="inner-avatar">
-               <img src="${
-                 data.avatar ||
-                 "https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png"
-               }" alt="${data.userName || "Khách avatar"}">
-             </div>`
+             <img src="${
+               data.avatar ||
+               "https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png"
+             }" 
+                  alt="${data.userName || "Khách"} avatar">
+           </div>`
           : ""
       }
       <div class="inner-content">${data.content}</div>
     </div>
   `;
 
-  body.appendChild(div);
-  body.scrollTop = body.scrollHeight;
+  bodyChat.insertBefore(div, elementListTyping);
+  bodyChat.scrollTop = bodyChat.scrollHeight;
 });
 
-// Lấy tin nhắn mới nhất khi lỡ reload
-const bodyChat = document.querySelector(".chat .inner-body");
+// Auto scroll to bottom on page load
 if (bodyChat) {
   bodyChat.scrollTop = bodyChat.scrollHeight;
 }
-// Show IconChat
-// Show Popup
+
+// Show Popup with Popper.js
 const button = document.querySelector(".button-icon");
-if (button) {
-  const tooltip = document.querySelector(".tooltip");
+const tooltip = document.querySelector(".tooltip");
+if (button && tooltip) {
   Popper.createPopper(button, tooltip);
   button.onclick = () => {
     tooltip.classList.toggle("shown");
   };
 }
-// Insert Emoji Picker
+
+// Show Typing
+var timeout;
+const showTyping = () => {
+  socket.emit("CLIENT_TYPING", "show");
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    socket.emit("CLIENT_TYPING", "hidden");
+  }, 3000);
+};
+// Emoji Picker
 const emojiPicker = document.querySelector("emoji-picker");
-if (emojiPicker) {
-  // Initialize emoji picker
+if (emojiPicker && chatInput) {
   emojiPicker.addEventListener("emoji-click", (event) => {
-    const chatInput = document.querySelector(
-      ".chat .inner-form input[name='content']"
-    );
     chatInput.value += event.detail.unicode;
-  });
-  // Input
-  chatInput.addEventListener("keyup", () => {
-    socket.emit("CLIENT_TYPING", "show");
-    setTimeout(() => {
-      socket.emit("CLIENT_TYPING", "hidden");
-    }, 3000);
+    // Luôn focus vào input sau khi chọn emoji
+    const end = chatInput.value.length;
+    chatInput.setSelectionRange(end, end);
+    chatInput.focus();
+    showTyping();
   });
 }
-// Server return Typing
-const elementListTyping = document.querySelector(".chat .inner-list-typing");
-if (elementListTyping) {
+
+// Typing indicator
+if (chatInput && elementListTyping) {
+  chatInput.addEventListener("keyup", () => {
+    showTyping();
+  });
+
+  // Server return Typing
   socket.on("SERVER_TYPING", (data) => {
+    if (data.userId === myId) return;
+
     const existingTyping = elementListTyping.querySelector(
       `[user-id="${data.userId}"]`
     );
 
     if (data.type === "show") {
-      // Nếu chưa có phần tử cho userId này, thêm mới
       if (!existingTyping) {
         const boxTyping = document.createElement("div");
         boxTyping.classList.add("box-typing");
@@ -109,11 +120,10 @@ if (elementListTyping) {
         `;
         elementListTyping.appendChild(boxTyping);
       }
-    } else if (data.type === "hidden") {
-      // Nếu có phần tử, xóa nó đi
-      if (existingTyping) {
-        elementListTyping.removeChild(existingTyping);
-      }
+      bodyChat.appendChild(elementListTyping);
+      bodyChat.scrollTop = bodyChat.scrollHeight;
+    } else if (data.type === "hidden" && existingTyping) {
+      elementListTyping.removeChild(existingTyping);
     }
   });
 }
