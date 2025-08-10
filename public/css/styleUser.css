@@ -402,7 +402,7 @@ a.btn-outline-primary {
 .chat {
   display: flex;
   flex-direction: column;
-  height: 500px;
+  height: 700px;
   border: 1px solid #ddd;
   border-radius: 10px;
   overflow: hidden;
@@ -423,8 +423,8 @@ a.btn-outline-primary {
 }
 
 .inner-head .inner-avatar img {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -460,6 +460,12 @@ a.btn-outline-primary {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+.inner-message-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Khoảng cách giữa nội dung văn bản và hình ảnh */
+  max-width: 100%;
 }
 
 .inner-incoming .inner-avatar img {
@@ -498,6 +504,36 @@ a.btn-outline-primary {
   background-color: #00c0d1;
   color: #fff;
   border-bottom-right-radius: 4px;
+}
+
+.inner-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  max-width: 100%;
+}
+
+.inner-images img {
+  max-width: 150px; /* Giới hạn chiều rộng tối đa của hình ảnh */
+  max-height: 150px; /* Giới hạn chiều cao tối đa của hình ảnh */
+  width: auto;
+  height: auto;
+  object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+  border-radius: 8px; /* Bo góc cho hình ảnh */
+  border: 1px solid #ddd; /* Viền nhẹ để tăng độ rõ nét */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng nhẹ */
+  transition: transform 0.2s ease; /* Hiệu ứng phóng to nhẹ khi hover */
+}
+
+.inner-images img:hover {
+  transform: scale(1.05); /* Phóng to nhẹ khi hover */
+}
+
+/* Đảm bảo hình ảnh trong outgoing và incoming đồng bộ */
+.inner-incoming .inner-images,
+.inner-outgoing .inner-images {
+  max-width: 70%; /* Giới hạn chiều rộng của container hình ảnh để phù hợp với nội dung tin nhắn */
 }
 
 .inner-foot {
@@ -577,14 +613,56 @@ a.btn-outline-primary {
 .tooltip {
   visibility: hidden;
   opacity: 0;
-  pointer-events: none; /* Không cho nhận click */
+  pointer-events: none;
   transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
 .tooltip.shown {
   visibility: visible;
   opacity: 1;
-  pointer-events: auto; /* Cho click lại khi hiện */
+  pointer-events: auto;
+}
+/*  Image*/
+#fileToggle {
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+#fileToggle:hover {
+  background-color: #f0f0f0;
+}
+
+#fileToggle.active {
+  background-color: #00c0d1;
+  color: #fff;
+}
+.chat .inner-preview-images {
+  position: relative;
+}
+
+.chat .inner-preview-images .label-container {
+  display: none;
+}
+
+.chat .inner-preview-images .input-container {
+  display: none;
+}
+
+.chat .inner-preview-images .image-preview {
+  height: auto;
+  padding: 0;
+  border-radius: 0;
+}
+
+.chat .inner-preview-images .image-preview-item {
+  width: 90px;
+  background-size: contain;
 }
 
 /* Container gợi ý typing */

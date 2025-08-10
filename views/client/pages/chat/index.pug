@@ -7,51 +7,76 @@ block content
         h3.box-head Chat
     .row
       .col-12
-        .chat(my-id=user.id)
-          .inner-head
-            .inner-avatar
-              if otherUser 
-                img(src=otherUser.avatar || 'https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png', alt=otherUser.userName || 'Khách avatar')
+        if user && user.id
+          .chat(my-id=user.id)
+            .inner-head
+              .inner-avatar
+                if otherUser 
+                  img(src=otherUser.avatar || 'https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png', alt=otherUser.userName || 'Khách avatar')
+                else
+                  img(src='/default-avatar.png', alt='Khách avatar')
+              .inner-name #{otherUser ? otherUser.userName : 'Khách'}
+
+            .inner-body
+              if chats && chats.length
+                each chat in chats
+                  if chat.user_Id.toString() === user.id.toString()
+                    .inner-outgoing
+                      .inner-message-content
+                        if chat.content
+                          .inner-content
+                            | #{chat.content}
+                        if chat.images
+                          .inner-images
+                            each image in chat.images 
+                              img(src=image)
+                  else
+                    .inner-incoming
+                      if chat.infoUser
+                        .inner-name #{chat.infoUser.userName || 'Khách'}
+                      .inner-message-row
+                        .inner-avatar
+                          img(src=chat.infoUser.avatar || 'https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png', alt=chat.infoUser.userName || 'Khách avatar')
+                        .inner-message-content
+                          if chat.content
+                            .inner-content
+                              | #{chat.content}
+                          if chat.images
+                            .inner-images
+                              each image in chat.images 
+                                img(src=image)
               else
-                img(src='/default-avatar.png', alt='Khách avatar')
-            .inner-name #{otherUser ? otherUser.userName : 'Khách'}
+                p Không có tin nhắn nào
+              
+              .inner-list-typing
+            .inner-preview-images
+              div.custom-file-container(data-upload-id='imgUpload')       
+            .inner-foot
+              form.inner-form(action="", method="post", enctype="multipart/form-data")
+                .input-group
+                  input#chatInput.form-control(
+                    type="text",
+                    placeholder="Nhập nội dung...",
+                    name="content",
+                    autocomplete="off"
+                  )
+                  // Nút toggle cho FilePond popup
+                  label#fileToggle.button-icon.btn.btn-light(title="Tải tệp lên" for="file-upload-with-preview-imgUpload")
+                    i.fa-solid.fa-camera
+                  div.custom-file-container(data-upload-id='imgUpload')
 
+                  span#emojiBtn.button-icon.btn.btn-light(title="Chọn emoji")
+                    i.fa-solid.fa-face-smile
+                  button#chatSend.btn.btn-info(type="submit", title="Gửi tin nhắn")
+                    i.fa-solid.fa-paper-plane
+              
+              //- // Popup FilePond nằm ngoài input-group nhưng trong .inner-foot
+              //- div#filePondPopup.filepond-popup
+              //-   input#fileUpload.filepond-input(type='file' name='filepond' multiple='' data-allow-reorder='true' data-max-file-size='3MB' data-max-files='3')
 
-          .inner-body
-            each chat in chats
-              // Sử dụng toString() để so sánh ObjectId
-              if chat.user_Id.toString() === infoUser._id.toString()
-                // Tin nhắn của mình (outgoing) - không hiện tên
-                .inner-outgoing
-                  .inner-content
-                    | #{chat.content}
-              else
-                // Tin nhắn của người khác (incoming) - hiện tên
-                .inner-incoming
-                  if chat.infoUser
-                    .inner-name #{chat.infoUser.userName}
-                  .inner-message-row
-                    .inner-avatar
-                      img(src=chat.infoUser.avatar || 'https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png', alt=chat.infoUser.userName || 'Khách avatar')
-                    .inner-content
-                      | #{chat.content}
+        else
+          p Lỗi: Không tìm thấy thông tin người dùng
 
-                
-            .inner-list-typing
-                  
-          .inner-foot
-            form.inner-form(action="")
-              .input-group
-                input#chatInput.form-control(
-                  type="text",
-                  placeholder="Nhập nội dung...",
-                  name="content",
-                  autocomplete="off"
-                )
-                .custom-file-container(data-upload-id="my-unique-id")
-                span#emojiBtn.button-icon.btn.btn-light(title="Chọn emoji")
-                  i.fa-solid.fa-face-smile
-                button#chatSend.btn.btn-info(type="submit", title="Gửi tin nhắn")
-                  i.fa-solid.fa-paper-plane
+  // Tooltip cho emoji nằm ngoài chat container
   div.tooltip(role="tooltip")
     emoji-picker.light

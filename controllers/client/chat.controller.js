@@ -1,3 +1,4 @@
+const { uploadToCloudinary } = require("../../helpers/uploadToCloudinary");
 const Chat = require("../../models/chat.model");
 const User = require("../../models/user.model");
 
@@ -9,12 +10,21 @@ module.exports.index = async (req, res) => {
 
   // Socket Io
   _io.once("connection", (socket) => {
-    socket.on("CLIENT_SEND_MESSAGE", async (content) => {
+    socket.on("CLIENT_SEND_MESSAGE", async (data) => {
+      let images = [];
+      for (const linkAnh of data.images) {
+        const link = await uploadToCloudinary(linkAnh);
+        images.push(link);
+      }
+      console.log(images);
+
       // Lưu vào DB
       const chat = new Chat({
         user_Id: userId,
-        content: content,
+        content: data.content,
+        images: images,
       });
+
       await chat.save();
 
       // Trả dữ liệu về client, bao gồm avatar
@@ -22,8 +32,9 @@ module.exports.index = async (req, res) => {
       _io.emit("SERVER_SEND_MESSAGE", {
         userId: userId,
         userName: userName,
-        content: content,
+        content: data.content,
         avatar: avatar,
+        images: images,
       });
     });
     // Typing
