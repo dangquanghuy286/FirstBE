@@ -771,3 +771,13 @@ a.btn-outline-primary {
 .box-user .inner-buttons button:hover {
   transform: scale(1.05);
 }
+
+.box-user [btn-cancel-friend] {
+  display: none;
+}
+.box-user.add [btn-add-friend] {
+  display: none;
+}
+.box-user.add [btn-cancel-friend] {
+  display: inline-block;
+}
