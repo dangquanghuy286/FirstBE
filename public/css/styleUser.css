@@ -721,3 +721,53 @@ a.btn-outline-primary {
     opacity: 1;
   }
 }
+/* Box Users */
+.box-user {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 10px;
+  padding: 8px 12px; /* giảm kích thước box */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  max-width: 300px; /* giới hạn chiều rộng box */
+}
+
+.box-user .inner-avatar {
+  flex-shrink: 0;
+}
+
+.box-user .inner-avatar img {
+  width: 50px; /* nhỏ hơn */
+  height: 50px; /* nhỏ hơn */
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #eee;
+}
+
+.box-user .inner-info {
+  flex: 1;
+  margin-left: 10px;
+}
+
+.box-user .inner-name {
+  font-size: 15px; /* nhỏ hơn */
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.box-user .inner-buttons {
+  display: flex;
+  gap: 6px; /* khoảng cách giữa các button */
+}
+
+.box-user .inner-buttons button {
+  font-size: 13px; /* nhỏ hơn */
+  padding: 3px 8px; /* nhỏ hơn */
+  border-radius: 6px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.box-user .inner-buttons button:hover {
+  transform: scale(1.05);
+}
