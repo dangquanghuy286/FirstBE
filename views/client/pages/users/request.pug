@@ -1,0 +1,21 @@
+extends ../../layouts/layoutDefault.pug
+
+block content
+  .container.my-3
+    include ../../partials/list-users.pug
+    .row  
+      .col-12
+        h3.box-head Danh sách người dùng
+    .row
+      each user in users
+        .col-6
+          .box-user
+            .inner-avatar
+              img(src=user.avatar, alt=user.name)
+            .inner-info
+              .inner-name #{user.name}
+              .inner-buttons
+                button.btn.btn-sm.btn-secondary Hủy lời mời
+
+block script
+  script(src="/js/users.js")

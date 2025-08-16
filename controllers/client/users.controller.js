@@ -28,3 +28,25 @@ module.exports.notFriend = async (req, res) => {
     users: users,
   });
 };
+
+// [GET]/users/request
+module.exports.requestFriend = async (req, res) => {
+  userSocket(res);
+
+  const userId = res.locals.user.id;
+
+  const myUser = await User.findOne({ _id: userId });
+
+  const requestFriend = myUser.requestFriends || [];
+
+  const users = await User.find({
+    _id: { $in: requestFriend },
+    status: "active",
+    deleted: false,
+  }).select("_id avatar userName");
+
+  res.render("client/pages/users/request", {
+    title: "RequestFriend",
+    users,
+  });
+};
