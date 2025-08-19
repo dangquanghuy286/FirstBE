@@ -20,3 +20,25 @@ if (listBtnCancelFriend.length > 0) {
     });
   });
 }
+// Chức năng xóa lời mời kết bạn
+const listBtnDeletedFriend = document.querySelectorAll("[btn-refuse-friend]");
+if (listBtnDeletedFriend.length > 0) {
+  listBtnDeletedFriend.forEach((button) => {
+    button.addEventListener("click", () => {
+      button.closest(".box-user").classList.add("refuse");
+      const userId = button.getAttribute("btn-refuse-friend");
+      socket.emit("CLIENT_DELETED_FRIEND", userId);
+    });
+  });
+}
+// Chức năng chấp nhận lời mời kết bạn
+const listBtnAcceptFriend = document.querySelectorAll("[btn-accept-friend]");
+if (listBtnAcceptFriend.length > 0) {
+  listBtnAcceptFriend.forEach((button) => {
+    button.addEventListener("click", () => {
+      button.closest(".box-user").classList.add("accepted");
+      const userId = button.getAttribute("btn-accept-friend");
+      socket.emit("CLIENT_ACCEPT_FRIEND", userId);
+    });
+  });
+}

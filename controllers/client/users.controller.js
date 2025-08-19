@@ -1,6 +1,6 @@
 const User = require("../../models/user.model");
 const userSocket = require("../../sockets/client/user.socket");
-
+//[GET]/users/notFiend
 module.exports.notFriend = async (req, res) => {
   userSocket(res);
 
@@ -48,5 +48,23 @@ module.exports.requestFriend = async (req, res) => {
     title: "RequestFriend",
     users: users,
   });
-  console.log(users);
+};
+// [GET]/users/accept
+module.exports.acceptFriend = async (req, res) => {
+  userSocket(res);
+
+  const userId = res.locals.user.id;
+  const myUser = await User.findOne({ _id: userId });
+  const acceptFriend = myUser.acceptFriends;
+
+  const users = await User.find({
+    _id: { $in: acceptFriend },
+    status: "active",
+    deleted: false,
+  }).select("_id avatar userName");
+
+  res.render("client/pages/users/accept", {
+    title: "AcceptFriend",
+    users: users,
+  });
 };

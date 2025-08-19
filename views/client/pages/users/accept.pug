@@ -1,0 +1,42 @@
+extends ../../layouts/layoutDefault.pug
+
+block content
+  .container.my-3
+    include ../../partials/list-users.pug
+    .row  
+      .col-12
+        h3.box-head Lời mời đã nhận
+    .row 
+        each user in users 
+          .col-6
+            .box-user
+                .inner-avatar
+                    img(src=user.avatar ? user.avatar:"https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png", alt=user.userName )
+                .inner-info
+                    .inner-name #{user.userName}
+                    .inner-buttons
+                        button(
+                        class="btn btn-sm btn-primary mr-1"
+                        btn-accept-friend=user.id
+                        ) Chấp nhận
+
+                        button(
+                        class="btn btn-sm btn-secondary mr-1"
+                        btn-refuse-friend=user.id
+                        ) Xóa
+
+                        button(
+                        class="btn btn-sm btn-secondary mr-1"
+                        btn-deleted-friend
+                        disabled
+                        ) Đã xóa
+                        button(
+                        class="btn btn-sm btn-primary mr-1"
+                        btn-accepted-friend
+                        disabled
+                        ) Đã chấp nhận
+
+
+
+block script
+  script(src="/js/users.js")
