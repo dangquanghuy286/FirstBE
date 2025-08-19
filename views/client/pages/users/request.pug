@@ -5,17 +5,18 @@ block content
     include ../../partials/list-users.pug
     .row  
       .col-12
-        h3.box-head Danh sách người dùng
+        h3.box-head Lời mời đã gửi
     .row
       each user in users
         .col-6
-          .box-user
+          .box-user(class="add")
             .inner-avatar
-              img(src=user.avatar, alt=user.name)
+              img(src=user.avatar ? user.avatar:"https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png", alt=user.userName )
             .inner-info
-              .inner-name #{user.name}
+              .inner-name #{user.userName}
               .inner-buttons
-                button.btn.btn-sm.btn-secondary Hủy lời mời
+                button.btn.btn-sm.btn-primary.mr-1(btn-add-friend=user.id) Kết bạn
+                button.btn.btn-sm.btn-secondary.mr-1(btn-cancel-friend=user.id) Hủy
 
 block script
   script(src="/js/users.js")
