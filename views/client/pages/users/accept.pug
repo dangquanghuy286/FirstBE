@@ -6,7 +6,7 @@ block content
     .row  
       .col-12
         h3.box-head Lời mời đã nhận
-    .row 
+    .row(data-user-accept=user.id)
         each user in users 
           .col-6
             .box-user

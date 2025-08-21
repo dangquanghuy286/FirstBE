@@ -51,6 +51,14 @@ module.exports = (res) => {
         userId: userId,
         lengthFriend: lengthFriend,
       });
+      // Lấy info của A trả về B
+      const infoUserA = await User.findOne({
+        _id: myUserId,
+      }).select("_id avatar userName");
+      socket.broadcast.emit("SERVER_RETURN_INFO_ACCEPT_FRIEND", {
+        userId: userId,
+        infoUserA: infoUserA,
+      });
     });
 
     // Chức năng hủy yêu cầu kết bạn

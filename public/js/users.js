@@ -52,3 +52,84 @@ if (accept) {
     }
   });
 }
+// SERVER_RETURN_INFO_ACCEPT_FRIEND
+const dataUserAccept = document.querySelector("[data-user-accept]");
+if (dataUserAccept) {
+  const userId = dataUserAccept.getAttribute("data-user-accept");
+  socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
+    if (userId === data.userId) {
+      // Vẽ giao diện
+      const div = document.createElement("div");
+      div.classList.add("col-6");
+
+      div.innerHTML = `
+          <div class="box-user">
+            <div class="inner-avatar">
+              <img 
+                src="${
+                  data.infoUserA.avatar
+                    ? data.infoUserA.avatar
+                    : "https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png"
+                }" 
+      
+                alt=${data.infoUserA.userName}
+              >
+            </div>
+
+            <div class="inner-info">
+              <div class="inner-name">${data.infoUserA.userName}</div>
+              <div class="inner-buttons">
+                <button 
+                  class="btn btn-sm btn-primary mr-1" 
+                  btn-accept-friend=${data.infoUserA._id}
+                >
+                  Chấp nhận
+                </button>
+
+                <button 
+                  class="btn btn-sm btn-secondary mr-1" 
+                  btn-refuse-friend=${data.infoUserA._id}
+                >
+                  Xóa
+                </button>
+
+                <button 
+                  class="btn btn-sm btn-secondary mr-1" 
+                  btn-deleted-friend 
+                  disabled
+                >
+                  Đã xóa
+                </button>
+
+                <button 
+                  class="btn btn-sm btn-primary mr-1" 
+                  btn-accepted-friend 
+                  disabled
+                >
+                  Đã chấp nhận
+                </button>
+              </div>
+            </div>
+          </div>
+
+  `;
+      dataUserAccept.appendChild(div);
+      // Hết vẽ giao diện
+
+      // Bắt sự kiện hủy
+      const button = div.querySelector("[btn-refuse-friend]");
+      button.addEventListener("click", () => {
+        button.closest(".box-user").classList.add("refuse");
+        const userId = button.getAttribute("btn-refuse-friend");
+        socket.emit("CLIENT_DELETED_FRIEND", userId);
+      });
+      // Bắt sự kiện chấp nhận lời mòi kết bạn
+      const buttonAccept = div.querySelector("[btn-accept-friend]");
+      buttonAccept.addEventListener("click", () => {
+        buttonAccept.closest(".box-user").classList.add("accepted");
+        const userId = buttonAccept.getAttribute("btn-accept-friend");
+        socket.emit("CLIENT_ACCEPT_FRIEND", userId);
+      });
+    }
+  });
+}
