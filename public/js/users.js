@@ -42,3 +42,13 @@ if (listBtnAcceptFriend.length > 0) {
     });
   });
 }
+// SERVER_RETURN_ACCEPT_FRIEND
+const accept = document.querySelector("[badge-light-accept]");
+if (accept) {
+  const userId = accept.getAttribute("badge-light-accept");
+  socket.on("SERVER_LENGTH_ACCEPT_FRIEND", (data) => {
+    if (userId === data.userId) {
+      accept.innerHTML = data.lengthFriend;
+    }
+  });
+}

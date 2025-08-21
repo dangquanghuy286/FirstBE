@@ -7,4 +7,7 @@ row
         a(href="/users/request"
         class="btn btn-primary m-1") Lời mời đã gửi
         a(href="/users/accept"
-        class="btn btn-primary m-1") Lời mời kết bạn
+        class="btn btn-primary m-1") 
+            | Lời mời kết bạn
+            span(class="badge badge-light"
+            badge-light-accept=user.id) #{user.acceptFriends.length}

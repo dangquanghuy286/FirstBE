@@ -42,6 +42,15 @@ module.exports = (res) => {
           }
         );
       }
+      //Lấy ra độ dài acceptFriend của B và trả về B
+      const infoUserB = await User.findOne({
+        _id: userId,
+      });
+      const lengthFriend = infoUserB.acceptFriends.length;
+      socket.broadcast.emit("SERVER_LENGTH_ACCEPT_FRIEND", {
+        userId: userId,
+        lengthFriend: lengthFriend,
+      });
     });
 
     // Chức năng hủy yêu cầu kết bạn
