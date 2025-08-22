@@ -1,28 +1,47 @@
 const User = require("../../models/user.model");
 
-// Xuất một hàm middleware nhận đối tượng response (res)
 module.exports = (res) => {
-  // Lắng nghe sự kiện kết nối socket
   _io.once("connection", (socket) => {
     // Chức năng gửi yêu cầu kết bạn
     socket.on("CLIENT_ADD_FRIEND", async (userId) => {
-      // userId: ID của người nhận yêu cầu kết bạn (B)
-      const myUserId = res.locals.user.id; // ID của người gửi yêu cầu kết bạn (A)
+      const myUserId = res.locals.user.id;
+
+      // THÊM: Kiểm tra xem hai người có đã là bạn bè không
+      const myUser = await User.findOne({ _id: myUserId });
+      const targetUser = await User.findOne({ _id: userId });
+
+      // Kiểm tra xem đã là bạn bè chưa
+      const alreadyFriends = myUser.listFriends.some(
+        (friend) => friend.user_Id === userId
+      );
+      const targetAlreadyFriends = targetUser.listFriends.some(
+        (friend) => friend.user_Id === myUserId
+      );
+
+      if (alreadyFriends || targetAlreadyFriends) {
+        // Nếu đã là bạn bè, không làm gì cả
+        return;
+      }
+
+      // Kiểm tra xem đã gửi yêu cầu chưa
+      const alreadyRequested = myUser.requestFriends.includes(userId);
+      const alreadyReceived = myUser.acceptFriends.includes(userId);
+
+      if (alreadyRequested || alreadyReceived) {
+        // Nếu đã gửi yêu cầu hoặc đã nhận yêu cầu, không làm gì cả
+        return;
+      }
 
       // Kiểm tra xem A đã có trong danh sách acceptFriends của B chưa
       const exitIdAinB = await User.findOne({
         _id: userId,
         acceptFriends: myUserId,
       });
-      // Nếu chưa có, thêm ID của A vào acceptFriends của B
+
       if (!exitIdAinB) {
         await User.updateOne(
-          {
-            _id: userId,
-          },
-          {
-            $push: { acceptFriends: myUserId },
-          }
+          { _id: userId },
+          { $push: { acceptFriends: myUserId } }
         );
       }
 
@@ -31,30 +50,26 @@ module.exports = (res) => {
         _id: myUserId,
         requestFriends: userId,
       });
-      // Nếu chưa có, thêm ID của B vào requestFriends của A
+
       if (!exitBinA) {
         await User.updateOne(
-          {
-            _id: myUserId,
-          },
-          {
-            $push: { requestFriends: userId },
-          }
+          { _id: myUserId },
+          { $push: { requestFriends: userId } }
         );
       }
-      //Lấy ra độ dài acceptFriend của B và trả về B
-      const infoUserB = await User.findOne({
-        _id: userId,
-      });
+
+      // Lấy ra độ dài acceptFriend của B và trả về B
+      const infoUserB = await User.findOne({ _id: userId });
       const lengthFriend = infoUserB.acceptFriends.length;
       socket.broadcast.emit("SERVER_LENGTH_ACCEPT_FRIEND", {
         userId: userId,
         lengthFriend: lengthFriend,
       });
+
       // Lấy info của A trả về B
-      const infoUserA = await User.findOne({
-        _id: myUserId,
-      }).select("_id avatar userName");
+      const infoUserA = await User.findOne({ _id: myUserId }).select(
+        "_id avatar userName"
+      );
       socket.broadcast.emit("SERVER_RETURN_INFO_ACCEPT_FRIEND", {
         userId: userId,
         infoUserA: infoUserA,
@@ -63,23 +78,18 @@ module.exports = (res) => {
 
     // Chức năng hủy yêu cầu kết bạn
     socket.on("CLIENT_CANCEL_FRIEND", async (userId) => {
-      // userId: ID của người nhận yêu cầu kết bạn (B)
-      const myUserId = res.locals.user.id; // ID của người gửi yêu cầu kết bạn (A)
+      const myUserId = res.locals.user.id;
 
       // Kiểm tra xem A có trong danh sách acceptFriends của B không
       const exitIdAinB = await User.findOne({
         _id: userId,
         acceptFriends: myUserId,
       });
-      // Nếu có, xóa ID của A khỏi acceptFriends của B
+
       if (exitIdAinB) {
         await User.updateOne(
-          {
-            _id: userId,
-          },
-          {
-            $pull: { acceptFriends: myUserId },
-          }
+          { _id: userId },
+          { $pull: { acceptFriends: myUserId } }
         );
       }
 
@@ -88,26 +98,22 @@ module.exports = (res) => {
         _id: myUserId,
         requestFriends: userId,
       });
-      // Nếu có, xóa ID của B khỏi requestFriends của A
+
       if (exitBinA) {
         await User.updateOne(
-          {
-            _id: myUserId,
-          },
-          {
-            $pull: { requestFriends: userId },
-          }
+          { _id: myUserId },
+          { $pull: { requestFriends: userId } }
         );
       }
-      //Lấy ra độ dài acceptFriend của B và trả về B
-      const infoUserB = await User.findOne({
-        _id: userId,
-      });
+
+      // Lấy ra độ dài acceptFriend của B và trả về B
+      const infoUserB = await User.findOne({ _id: userId });
       const lengthFriend = infoUserB.acceptFriends.length;
       socket.broadcast.emit("SERVER_LENGTH_ACCEPT_FRIEND", {
         userId: userId,
         lengthFriend: lengthFriend,
       });
+
       // Lấy id của A trả về cho B
       socket.broadcast.emit("SERVER_RETURN_USERID_CANCEL_FRIEND", {
         userIdB: userId,
@@ -117,23 +123,18 @@ module.exports = (res) => {
 
     // Chức năng từ chối yêu cầu kết bạn
     socket.on("CLIENT_DELETED_FRIEND", async (userId) => {
-      // userId: ID của người gửi yêu cầu kết bạn (A)
-      const myUserId = res.locals.user.id; // ID của người nhận yêu cầu kết bạn (B)
+      const myUserId = res.locals.user.id;
 
       // Kiểm tra xem A có trong danh sách acceptFriends của B không
       const exitIdAinB = await User.findOne({
         _id: myUserId,
         acceptFriends: userId,
       });
-      // Nếu có, xóa ID của A khỏi acceptFriends của B
+
       if (exitIdAinB) {
         await User.updateOne(
-          {
-            _id: myUserId,
-          },
-          {
-            $pull: { acceptFriends: userId },
-          }
+          { _id: myUserId },
+          { $pull: { acceptFriends: userId } }
         );
       }
 
@@ -142,40 +143,44 @@ module.exports = (res) => {
         _id: userId,
         requestFriends: myUserId,
       });
-      // Nếu có, xóa ID của B khỏi requestFriends của A
+
       if (exitBinA) {
         await User.updateOne(
-          {
-            _id: userId,
-          },
-          {
-            $pull: { requestFriends: myUserId },
-          }
+          { _id: userId },
+          { $pull: { requestFriends: myUserId } }
         );
       }
     });
 
     // Chức năng chấp nhận yêu cầu kết bạn
     socket.on("CLIENT_ACCEPT_FRIEND", async (userId) => {
-      // userId: ID của người gửi yêu cầu kết bạn (A)
-      const myUserId = res.locals.user.id; // ID của người nhận yêu cầu kết bạn (B)
+      const myUserId = res.locals.user.id;
+
+      // THÊM: Kiểm tra xem đã là bạn bè chưa
+      const myUser = await User.findOne({ _id: myUserId });
+      const alreadyFriends = myUser.listFriends.some(
+        (friend) => friend.user_Id === userId
+      );
+
+      if (alreadyFriends) {
+        // Nếu đã là bạn bè, không làm gì cả
+        return;
+      }
 
       // Kiểm tra xem A có trong danh sách acceptFriends của B không
       const exitIdAinB = await User.findOne({
         _id: myUserId,
         acceptFriends: userId,
       });
-      // Nếu có, thêm A vào danh sách bạn bè của B và xóa A khỏi acceptFriends của B
+
       if (exitIdAinB) {
         await User.updateOne(
-          {
-            _id: myUserId,
-          },
+          { _id: myUserId },
           {
             $push: {
               listFriends: {
                 user_Id: userId,
-                room_chat_Id: "", // ID phòng chat để trống, sẽ được cập nhật sau
+                room_chat_Id: "",
               },
             },
             $pull: { acceptFriends: userId },
@@ -188,23 +193,33 @@ module.exports = (res) => {
         _id: userId,
         requestFriends: myUserId,
       });
-      // Nếu có, thêm B vào danh sách bạn bè của A và xóa B khỏi requestFriends của A
+
       if (exitBinA) {
         await User.updateOne(
-          {
-            _id: userId,
-          },
+          { _id: userId },
           {
             $push: {
               listFriends: {
                 user_Id: myUserId,
-                room_chat_Id: "", // ID phòng chat để trống, sẽ được cập nhật sau
+                room_chat_Id: "",
               },
             },
             $pull: { requestFriends: myUserId },
           }
         );
       }
+
+      // THÊM: Emit sự kiện để cập nhật giao diện
+      // Thông báo cho cả hai người dùng rằng họ đã trở thành bạn bè
+      socket.emit("SERVER_FRIEND_ACCEPTED", {
+        userId: userId,
+        myUserId: myUserId,
+      });
+
+      socket.broadcast.emit("SERVER_FRIEND_ACCEPTED", {
+        userId: myUserId,
+        myUserId: userId,
+      });
     });
   });
 };

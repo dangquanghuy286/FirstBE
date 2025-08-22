@@ -1,0 +1,28 @@
+extends ../../layouts/layoutDefault.pug
+
+block content
+  .container.my-3
+    include ../../partials/list-users.pug
+    .row  
+      .col-12
+        h3.box-head Danh sách bạn bè
+    .row
+      each friend in friends
+        .col-6(friend-id=friend.id)
+          .box-user
+            .inner-avatar
+              img(
+                src=friend.avatar ? friend.avatar : "https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png",
+                alt=friend.userName
+              )
+              // tag trạng thái
+              span.status(class=friend.statusOnline === "online" ? "online" : "offline")
+
+            .inner-info
+              .inner-name #{friend.userName}
+              .inner-status #{friend.statusOnline === "online" ? "Đang hoạt động" : "Ngoại tuyến"}
+              .inner-buttons
+                button.btn.btn-sm.btn-primary(
+                  type="button",
+                  data-chat-with=friend.id
+                ) Nhắn tin

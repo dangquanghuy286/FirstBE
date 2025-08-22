@@ -811,3 +811,37 @@ a.btn-outline-primary {
 .box-user.accepted [btn-accepted-friend] {
   display: inline-block;
 }
+
+/* ---- Friend Online/Offline ---- */
+.box-user {
+  position: relative;
+}
+
+.box-user .inner-avatar {
+  position: relative;
+  display: inline-block;
+}
+
+.box-user .inner-avatar .status {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.box-user .inner-avatar .status.online {
+  background-color: #28a745; /* xanh lá online */
+}
+
+.box-user .inner-avatar .status.offline {
+  background-color: #6c757d; /* xám offline */
+}
+
+.box-user .inner-status {
+  font-size: 12px;
+  color: #777;
+}

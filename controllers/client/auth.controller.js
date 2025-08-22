@@ -6,8 +6,18 @@ const sendEmail = require("../../helpers/sendMail");
 const Carts = require("../../models/card.model");
 
 // [GET] /user/logout
-module.exports.logout = (req, res) => {
+module.exports.logout = async (req, res) => {
+  await User.updateOne(
+    {
+      tokenUser: req.cookies.tokenUser,
+    },
+    {
+      statusOnline: "offline",
+    }
+  );
   res.clearCookie("tokenUser");
+  res.clearCookie("cartId");
+
   req.flash("success", "Đăng xuất thành công");
   res.redirect("/user/login");
 };
@@ -111,6 +121,15 @@ module.exports.loginPost = async (req, res) => {
     }
 
     res.cookie("tokenUser", userLogin.tokenUser);
+
+    await User.updateOne(
+      {
+        tokenUser: userLogin.tokenUser,
+      },
+      {
+        statusOnline: "online",
+      }
+    );
 
     req.flash("success", "Đăng nhập thành công");
     res.redirect("/");
