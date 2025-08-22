@@ -61,7 +61,7 @@ if (dataUserAccept) {
       // Vẽ giao diện
       const div = document.createElement("div");
       div.classList.add("col-6");
-
+      div.setAttribute("user-id", data.infoUserA._id);
       div.innerHTML = `
           <div class="box-user">
             <div class="inner-avatar">
@@ -133,3 +133,15 @@ if (dataUserAccept) {
     }
   });
 }
+// SERVER_RETURN_USERID_CANCEL_FRIEND
+socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
+  const userIdA = data.userIdA;
+  const boxUserRemove = document.querySelector(`[user-id='${userIdA}']`);
+  if (boxUserRemove) {
+    const dataUserAccept = document.querySelector("[data-user-accept]");
+    const userIdB = accept.getAttribute("badge-light-accept");
+    if (userIdB === data.userIdB) {
+      dataUserAccept.removeChild(boxUserRemove);
+    }
+  }
+});
