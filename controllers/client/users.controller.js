@@ -14,7 +14,7 @@ module.exports.notFriend = async (req, res) => {
   // Lấy danh sách ID của những người đã là bạn bè
   const listFriendsId = listFriends.map((friend) => friend.user_Id);
 
-  // CẢI THIỆN: Thêm điều kiện loại trừ những người đã là bạn bè
+  // Thêm điều kiện loại trừ những người đã là bạn bè
   const users = await User.find({
     $and: [
       { _id: { $ne: userId } }, // Không phải chính mình
@@ -40,7 +40,7 @@ module.exports.requestFriend = async (req, res) => {
 
   const requestFriend = myUser.requestFriends || [];
 
-  // CẢI THIỆN: Thêm kiểm tra để loại trừ những người đã là bạn bè
+  // Thêm kiểm tra để loại trừ những người đã là bạn bè
   const listFriends = myUser.listFriends || [];
   const listFriendsId = listFriends.map((friend) => friend.user_Id);
 
@@ -67,7 +67,7 @@ module.exports.acceptFriend = async (req, res) => {
 
   const acceptFriend = myUser.acceptFriends || [];
 
-  // CẢI THIỆN: Thêm kiểm tra để loại trừ những người đã là bạn bè
+  //Thêm kiểm tra để loại trừ những người đã là bạn bè
   const listFriends = myUser.listFriends || [];
   const listFriendsId = listFriends.map((friend) => friend.user_Id);
 
@@ -103,6 +103,6 @@ module.exports.friendList = async (req, res) => {
 
   res.render("client/pages/users/friendList", {
     title: "Friends",
-    friends: users,
+    users: users,
   });
 };

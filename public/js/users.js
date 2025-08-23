@@ -162,3 +162,22 @@ socket.on("SERVER_RETURN_USERID_CANCEL_FRIEND", (data) => {
     }
   }
 });
+// SERVER_RETURN_USER_ONLINE
+socket.on("SERVER_RETURN_USER_ONLINE", (data) => {
+  const dataUserFriends = document.querySelector("[data-users-friends]");
+  if (dataUserFriends) {
+    const boxUser = dataUserFriends.querySelector(`[user-id='${data.userId}']`);
+    if (boxUser) {
+      const boxStatus = boxUser.querySelector("[status]");
+      boxStatus.setAttribute("status", "online");
+      boxStatus.classList.remove("offline");
+      boxStatus.classList.add("online");
+      // update text hiển thị
+      const innerStatus = boxUser.querySelector(".inner-status");
+      if (innerStatus) {
+        innerStatus.textContent = "Đang hoạt động";
+        innerStatus.setAttribute("status", data.status);
+      }
+    }
+  }
+});
