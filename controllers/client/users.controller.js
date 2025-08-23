@@ -1,6 +1,11 @@
 const User = require("../../models/user.model");
 const userSocket = require("../../sockets/client/user.socket");
-
+// [GET]/users
+module.exports.friend = async (req, res) => {
+  res.render("client/pages/users/listfriend", {
+    title: "AcceptFriend",
+  });
+};
 // [GET]/users/notFriend
 module.exports.notFriend = async (req, res) => {
   userSocket(res);
@@ -91,7 +96,6 @@ module.exports.friendList = async (req, res) => {
   userSocket(res);
   const userId = res.locals.user.id;
   const myUser = await User.findOne({ _id: userId });
-
   const listFriends = myUser.listFriends || [];
   const listFriendId = listFriends.map((item) => item.user_Id);
 
@@ -100,6 +104,11 @@ module.exports.friendList = async (req, res) => {
     status: "active",
     deleted: false,
   }).select("_id avatar userName statusOnline");
+
+  for (const user of users) {
+    const infoUser = listFriends.find((friend) => friend.user_Id == user.id);
+    user.infoUser = infoUser;
+  }
 
   res.render("client/pages/users/friendList", {
     title: "Friends",

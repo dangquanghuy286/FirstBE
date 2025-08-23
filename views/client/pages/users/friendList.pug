@@ -1,5 +1,4 @@
 extends ../../layouts/layoutDefault.pug
-
 block content
   .container.my-3
     include ../../partials/list-users.pug
@@ -18,12 +17,13 @@ block content
               // tag trạng thái
               span.status(class=user.statusOnline === "online" ? "online" : "offline",
               status=user.statusOnline)
-
             .inner-info
               .inner-name #{user.userName}
               .inner-status(status=user.statusOnline) #{user.statusOnline === "online" ? "Đang hoạt động" : "Ngoại tuyến"}
               .inner-buttons
-                button.btn.btn-sm.btn-primary(
-                  type="button",
-                  data-chat-with=user.id
-                ) Nhắn tin
+                
+                if user.infoUser && user.infoUser.room_chat_Id
+                  a.btn.btn-sm.btn-primary(
+                    href=`/chat/${user.infoUser.room_chat_Id}`,
+                    data-chat-with=user.id
+                  ) Nhắn tin

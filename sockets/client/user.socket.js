@@ -1,3 +1,4 @@
+const RoomChat = require("../../models/roomchat.model");
 const User = require("../../models/user.model");
 
 module.exports = (res) => {
@@ -153,10 +154,11 @@ module.exports = (res) => {
     });
 
     // Chức năng chấp nhận yêu cầu kết bạn
+    // Chức năng chấp nhận yêu cầu kết bạn
     socket.on("CLIENT_ACCEPT_FRIEND", async (userId) => {
       const myUserId = res.locals.user.id;
 
-      // THÊM: Kiểm tra xem đã là bạn bè chưa
+      // Kiểm tra xem đã là bạn bè chưa
       const myUser = await User.findOne({ _id: myUserId });
       const alreadyFriends = myUser.listFriends.some(
         (friend) => friend.user_Id === userId
@@ -173,53 +175,69 @@ module.exports = (res) => {
         acceptFriends: userId,
       });
 
-      if (exitIdAinB) {
-        await User.updateOne(
-          { _id: myUserId },
-          {
-            $push: {
-              listFriends: {
-                user_Id: userId,
-                room_chat_Id: "",
-              },
-            },
-            $pull: { acceptFriends: userId },
-          }
-        );
-      }
-
       // Kiểm tra xem B có trong danh sách requestFriends của A không
       const exitBinA = await User.findOne({
         _id: userId,
         requestFriends: myUserId,
       });
 
-      if (exitBinA) {
+      let roomChat;
+
+      // SỬA: Điều kiện tạo phòng chat
+      if (exitIdAinB && exitBinA) {
+        // Tạo phòng chat chung
+        const dataRoom = {
+          typeRoom: "friend",
+          // SỬA: Thêm cả 2 user vào phòng
+          users: [
+            { user_Id: myUserId, role: "superAdmin" },
+            { user_Id: userId, role: "superAdmin" },
+          ],
+        };
+
+        roomChat = new RoomChat(dataRoom);
+        await roomChat.save();
+
+        // Cập nhật listFriends cho cả 2 user
+        await User.updateOne(
+          { _id: myUserId },
+          {
+            $push: {
+              listFriends: {
+                user_Id: userId,
+                room_chat_Id: roomChat.id,
+              },
+            },
+            $pull: { acceptFriends: userId },
+          }
+        );
+
         await User.updateOne(
           { _id: userId },
           {
             $push: {
               listFriends: {
                 user_Id: myUserId,
-                room_chat_Id: "",
+                room_chat_Id: roomChat.id,
               },
             },
             $pull: { requestFriends: myUserId },
           }
         );
+
+        // Thông báo cho cả hai người dùng rằng họ đã trở thành bạn bè
+        socket.emit("SERVER_FRIEND_ACCEPTED", {
+          userId: userId,
+          myUserId: myUserId,
+          roomChatId: roomChat.id, // Thêm roomChatId để client có thể sử dụng
+        });
+
+        socket.broadcast.emit("SERVER_FRIEND_ACCEPTED", {
+          userId: myUserId,
+          myUserId: userId,
+          roomChatId: roomChat.id,
+        });
       }
-
-      // THÊM: Emit sự kiện để cập nhật giao diện
-      // Thông báo cho cả hai người dùng rằng họ đã trở thành bạn bè
-      socket.emit("SERVER_FRIEND_ACCEPTED", {
-        userId: userId,
-        myUserId: myUserId,
-      });
-
-      socket.broadcast.emit("SERVER_FRIEND_ACCEPTED", {
-        userId: myUserId,
-        myUserId: userId,
-      });
     });
   });
 };
