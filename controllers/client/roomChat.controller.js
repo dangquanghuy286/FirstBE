@@ -3,7 +3,16 @@ const User = require("../../models/user.model");
 
 // [GET] /rooms-chat/
 module.exports.index = async (req, res) => {
-  res.render("client/pages/roomChat/index");
+  const userId = res.locals.user.id;
+  const listRoom = await RoomChat.find({
+    "users.user_Id": userId,
+    typeRoom: "group",
+    deleted: false,
+  });
+  res.render("client/pages/roomChat/index", {
+    title: "List Room",
+    listRoom: listRoom,
+  });
 };
 // [GET] /rooms-chat/create
 module.exports.create = async (req, res) => {
