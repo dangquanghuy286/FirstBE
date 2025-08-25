@@ -1,0 +1,20 @@
+extends ../../layouts/layoutDefault.pug
+block content
+  .container.my-3
+    h3.box-head Tạo phòng chat mới
+    form(method="POST" action="/rooms-chat/create")
+      .form-group
+        label(for="roomName") Tên phòng
+        input#roomName.form-control(type="text", name="roomName", placeholder="Nhập tên phòng...")
+      .form-group.mt-3
+        label Thêm thành viên
+        .list-friends
+          if userFriend && userFriend.length > 0
+            each friend in userFriend
+              if friend.infoFriend
+                .form-check
+                  input.form-check-input(type="checkbox", name="members", id=`friend-${friend.user_Id}`, value=friend.user_Id)
+                  label.form-check-label(for=`friend-${friend.user_Id}`) #{friend.infoFriend.userName}
+          else
+            p.text-muted Không có bạn bè nào để thêm vào phòng
+      button.btn.btn-primary.mt-3(type="submit") Tạo phòng
